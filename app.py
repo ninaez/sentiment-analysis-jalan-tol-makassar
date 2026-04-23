@@ -165,20 +165,26 @@ if uploaded_file is not None:
             if len(sub) > 0:
                 col_g, col_s = st.columns(2)
                 
-                # General
+                # Hitung data
                 g_count = sub['general_topic'].value_counts().reset_index(name='Total')
+                s_count = sub['topic_list'].value_counts().reset_index(name='Total')
+                
+                # KUNCI PERBAIKAN: Tentukan satu tinggi yang sama untuk kedua grafik
+                # Minimal tinggi 450px, atau memanjang ke bawah jika topiknya sangat banyak
+                tinggi_grafik = max(450, len(s_count) * 25)
+                
+                # General
                 fig_g = px.bar(g_count, x='Total', y='general_topic', orientation='h', title=f'Topik General - {cat}', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
-                fig_g.update_layout(yaxis={'categoryorder':'total ascending'})
+                fig_g.update_layout(yaxis={'categoryorder':'total ascending'}, height=tinggi_grafik)
                 fig_g.write_html(f"{OUTPUT_DIR}/Chart_5_General_Topic_{cat}.html")
                 with col_g: st.plotly_chart(fig_g, use_container_width=True)
 
                 # Spesifik
-                s_count = sub['topic_list'].value_counts().reset_index(name='Total')
                 fig_s = px.bar(s_count, x='Total', y='topic_list', orientation='h', title=f'Topik Spesifik - {cat}', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
-                fig_s.update_layout(yaxis={'categoryorder':'total ascending'}, height=max(400, len(s_count)*25))
+                fig_s.update_layout(yaxis={'categoryorder':'total ascending'}, height=tinggi_grafik)
                 fig_s.write_html(f"{OUTPUT_DIR}/Chart_6_Specific_Topic_{cat}.html")
                 with col_s: st.plotly_chart(fig_s, use_container_width=True)
-
+                    
         # V6. Wordcloud
         st.write("---")
         st.write("### Wordcloud Sentimen")
