@@ -383,7 +383,7 @@ else:
             shutil.make_archive("Dashboard_Sentimen_MUN_Live", 'zip', OUTPUT_DIR)
             
             st.write("---")
-            st.info("✅ Seluruh grafik interaktif (HTML) dan Data Bersih (CSV) telah siap diunduh.")
+            st.info("Seluruh visualisasi dan Data Bersih (CSV) telah siap diunduh.")
             
             with open("Dashboard_Sentimen_MUN_Live.zip", "rb") as fp:
                 st.download_button(
