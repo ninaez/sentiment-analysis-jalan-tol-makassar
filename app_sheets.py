@@ -214,42 +214,6 @@ else:
             df.to_csv(f"{OUTPUT_DIR}/1_Cleaned_Data.csv", index=False)
 
             st.success(f"Berhasil menarik {len(df)} baris data dari Google Sheets (Periode: {tanggal_mulai.strftime('%d %b %Y')} - {tanggal_selesai.strftime('%d %b %Y')}).")
-
-            # ----------------------------------------------------
-            # KARTU RINGKASAN (SUMMARY METRICS)
-            # ----------------------------------------------------
-            # 1. Hitung total komentar (berdasarkan jumlah baris data setelah difilter)
-            total_komentar = len(df)
-            
-            # 2. Hitung jumlah user unik (menghindari error jika kolom tidak ada)
-            if 'usrnm_cmmnt' in df.columns:
-                total_user = df['usrnm_cmmnt'].nunique()
-            else:
-                total_user = 0
-                st.warning("⚠️ Kolom 'usrnm_cmmnt' tidak ditemukan di dataset untuk menghitung Unique User.")
-
-            # 3. Buat layout 3 kolom (2 untuk kartu, 1 kosong di kanan agar tidak terlalu memanjang)
-            col_met1, col_met2, col_blank = st.columns([1, 1, 2])
-            
-            with col_met1:
-                st.markdown(f"""
-                <div style="background-color: #E6F3FF; padding: 20px; border-radius: 10px; border-left: 6px solid #004B93; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
-                    <p style="margin:0; font-size: 16px; color: #555; font-weight: bold;">💬 Total Komentar</p>
-                    <h1 style="margin:0; font-size: 38px; color: #004B93;">{total_komentar}</h1>
-                </div>
-                """, unsafe_allow_html=True)
-
-            with col_met2:
-                st.markdown(f"""
-                <div style="background-color: #FFFCE6; padding: 20px; border-radius: 10px; border-left: 6px solid #FFCC00; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
-                    <p style="margin:0; font-size: 16px; color: #555; font-weight: bold;">👥 Unique User</p>
-                    <h1 style="margin:0; font-size: 38px; color: #B38F00;">{total_user}</h1>
-                </div>
-                """, unsafe_allow_html=True)
-                
-            # Berikan sedikit spasi sebelum masuk ke grafik
-            st.write("<br>", unsafe_allow_html=True)
-            # ----------------------------------------------------
             
             # VISUALISASI
             col1, col2 = st.columns(2)
