@@ -242,11 +242,11 @@ else:
                 st.markdown(f'<div style="{card_css}"><p style="{title_css}">Unique User</p><h1 style="margin: 0; font-size: 36px; color: #00AEEF;">{total_user}</h1></div>', unsafe_allow_html=True)
             with c3:
                 # Menggunakan warna dari COLOR_MAP untuk metrik sentimen
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">% Positif</p><h1 style="margin: 0; font-size: 36px; color: {MUN_BLUE};">{pct_positif:.1f}%</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Positif</p><h1 style="margin: 0; font-size: 36px; color: {MUN_BLUE};">{pct_positif:.1f}%</h1></div>', unsafe_allow_html=True)
             with c4:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">% Netral</p><h1 style="margin: 0; font-size: 36px; color: {MUN_YELLOW};">{pct_netral:.1f}%</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Netral</p><h1 style="margin: 0; font-size: 36px; color: {MUN_YELLOW};">{pct_netral:.1f}%</h1></div>', unsafe_allow_html=True)
             with c5:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">% Negatif</p><h1 style="margin: 0; font-size: 36px; color: {MUN_RED};">{pct_negatif:.1f}%</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Negatif</p><h1 style="margin: 0; font-size: 36px; color: {MUN_RED};">{pct_negatif:.1f}%</h1></div>', unsafe_allow_html=True)
 
             st.write("<br>", unsafe_allow_html=True)
             # ----------------------------------------------------
