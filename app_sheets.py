@@ -191,7 +191,6 @@ if not gsheets_url:
 else:
     # ----------------------------------------------------
     # FILTER RENTANG TANGGAL (Pindah ke Main Area)
-    # KUNCI PERBAIKAN: Layout sejajar dengan Teks "Periode waktu"
     # ----------------------------------------------------
     st.write("<hr style='margin-top: 10px; margin-bottom: 15px;'>", unsafe_allow_html=True)
     
@@ -199,14 +198,16 @@ else:
     col_label, col_d1, col_d2, col_blank = st.columns([1.5, 2, 2, 4.5])
     
     with col_label:
-        # Menambahkan padding atas agar sejajar dengan input box
-        st.markdown("<div style='padding-top: 32px; font-size: 16px; font-weight: bold; color: #333;'>Periode waktu</div>", unsafe_allow_html=True)
+        # KUNCI PERBAIKAN: Padding diturunkan jadi 8px agar sejajar karena label box tanggal hilang
+        st.markdown("<div style='padding-top: 8px; font-size: 16px; font-weight: bold; color: #333;'>Periode waktu</div>", unsafe_allow_html=True)
     
     with col_d1:
-        tanggal_mulai = st.date_input("Tanggal mulai (slicer)")
+        # KUNCI PERBAIKAN: Menggunakan label_visibility="collapsed" untuk menyembunyikan label
+        tanggal_mulai = st.date_input("Mulai", label_visibility="collapsed")
         
     with col_d2:
-        tanggal_selesai = st.date_input("Tanggal selesai (slicer)")
+        # KUNCI PERBAIKAN: Menggunakan label_visibility="collapsed" untuk menyembunyikan label
+        tanggal_selesai = st.date_input("Selesai", label_visibility="collapsed")
         
     st.write("<br>", unsafe_allow_html=True)
     # ----------------------------------------------------
