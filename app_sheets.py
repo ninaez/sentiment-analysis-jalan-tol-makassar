@@ -10,6 +10,44 @@ from wordcloud import WordCloud, STOPWORDS
 
 # Konfigurasi Halaman Web
 st.set_page_config(page_title="Dashboard Sentimen MUN (Live)", page_icon="📊", layout="wide")
+
+# ==========================================
+# INJEKSI CSS UNTUK MENGUBAH UKURAN FONT
+# ==========================================
+st.markdown("""
+    <style>
+    /* 1. Ukuran font Judul Utama (st.title) */
+    h1 {
+        font-size: 34px !important;
+    }
+    
+    /* 2. Ukuran font Header (st.header) */
+    h2 {
+        font-size: 26px !important;
+    }
+    
+    /* 3. Ukuran font Subheader (st.subheader) */
+    h3 {
+        font-size: 20px !important;
+    }
+    
+    /* 4. Ukuran font Teks Biasa / Info / Paragraf (st.write, st.info) */
+    p {
+        font-size: 16px !important;
+    }
+    
+    /* 5. Khusus mengubah ukuran Header di Sidebar */
+    [data-testid="stSidebar"] h2 {
+        font-size: 24px !important;
+    }
+    
+    /* 6. Khusus mengubah ukuran Subheader di Sidebar */
+    [data-testid="stSidebar"] h3 {
+        font-size: 16px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 st.title("⚙️ PROGRAM SENTIMENT ANALYSIS (LIVE DARI GOOGLE SHEETS)")
 
 # ==========================================
