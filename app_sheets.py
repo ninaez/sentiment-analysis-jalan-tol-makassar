@@ -19,7 +19,7 @@ st.markdown("""
     <style>
     /* Mengurangi ruang kosong di bagian paling atas halaman tanpa memotong teks */
     .block-container {
-        padding-top: 1.5rem !important; /* Angka ini aman agar teks tidak nabrak atas */
+        padding-top: 2.5rem !important; /* Angka ini aman agar teks tidak nabrak atas */
         padding-bottom: 1rem !important;
     }
 
