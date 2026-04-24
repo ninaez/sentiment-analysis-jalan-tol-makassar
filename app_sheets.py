@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
 
 # Konfigurasi Halaman Web
-st.set_page_config(page_title="Dashboard Sentimen MAN & MMN (Live)", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Sentiment Dashboard MAN & MMN (Live)", page_icon="📊", layout="wide")
 
 # ==========================================
 # ==========================================
