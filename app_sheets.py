@@ -32,7 +32,7 @@ st.markdown("""
 
     /* 3. Ukuran font Judul Utama (st.title) */
     h1 {
-        font-size: 34px !important;
+        font-size: 32px !important;
         margin-top: 0rem !important; /* Pastikan tetap 0 agar tidak terpotong */
         padding-top: 0rem !important;
     }
@@ -65,7 +65,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("DASHBOARD SENTIMENT ANALYSIS - JALAN TOL MAKASSAR")
+st.title("DASHBOARD SENTIMENT ANALYSIS - Jalan Tol Makassar")
 
 # ==========================================
 # FUNGSI MEMBACA GOOGLE SHEETS
