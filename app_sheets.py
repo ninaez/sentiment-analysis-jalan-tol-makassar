@@ -233,7 +233,7 @@ else:
             df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
             
             if df.empty:
-                st.warning("⚠️ Tidak ada data sentimen yang ditemukan pada rentang tanggal tersebut.")
+                st.warning("⚠️Tidak ada data sentimen yang ditemukan pada rentang tanggal tersebut.")
                 st.stop()
 
             df['content_type'] = 'Konten Reguler'
