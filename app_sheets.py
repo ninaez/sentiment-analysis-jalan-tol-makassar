@@ -242,10 +242,23 @@ else:
             # V4. Konten Reguler vs Pengumuman
             if ada_penyesuaian_tarif:
                 df_comp = df.groupby(['content_type', 'category']).size().reset_index(name='Total')
-                fig_comp = px.bar(df_comp, x='content_type', y='Total', color='category', barmode='group', title='Perbandingan: Konten Reguler vs Pengumuman Tarif', text='Total', color_discrete_map=COLOR_MAP)
+                fig_comp = px.bar(df_comp, x='content_type', y='Total', color='category', 
+                                  barmode='group', title='Perbandingan: Konten Reguler vs Pengumuman Tarif', 
+                                  text='Total', color_discrete_map=COLOR_MAP)
                 
-                # KUNCI PERBAIKAN: Menghilangkan judul sumbu X, sumbu Y, dan judul legenda
-                fig_comp.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='')
+                # KUNCI PERBAIKAN: 
+                # 1. 'auto' akan menaruh angka di dalam jika cukup, dan di luar jika sempit.
+                # 2. 'cliponaxis=False' memastikan angka di luar tidak terpotong garis bingkai.
+                fig_comp.update_traces(textposition='auto', cliponaxis=False)
+                
+                # Menghilangkan judul sumbu X, sumbu Y, dan judul legenda
+                fig_comp.update_layout(
+                    xaxis_title=None, 
+                    yaxis_title=None, 
+                    legend_title_text='',
+                    # Memastikan margin atas cukup jika angka pindah ke luar bar paling tinggi
+                    margin=dict(t=50) 
+                )
                 
                 fig_comp.write_html(f"{OUTPUT_DIR}/Chart_4_Comparison.html")
                 st.plotly_chart(fig_comp, use_container_width=True)
