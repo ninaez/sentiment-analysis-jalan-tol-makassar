@@ -48,7 +48,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("PROGRAM SENTIMENT ANALYSIS JALAN TOL MAKASSAR")
+st.title("DASHBOARD SENTIMENT ANALYSIS - JALAN TOL MAKASSAR")
 
 # ==========================================
 # FUNGSI MEMBACA GOOGLE SHEETS
