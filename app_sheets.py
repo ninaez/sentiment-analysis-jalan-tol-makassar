@@ -12,13 +12,21 @@ from wordcloud import WordCloud, STOPWORDS
 st.set_page_config(page_title="Dashboard Sentimen MAN & MMN (Live)", page_icon="📊", layout="wide")
 
 # ==========================================
-# INJEKSI CSS UNTUK MENGUBAH UKURAN FONT
+# INJEKSI CSS UNTUK MENGUBAH TAMPILAN
 # ==========================================
 st.markdown("""
     <style>
-    /* 1. Ukuran font Judul Utama (st.title) */
+    /* KUNCI PERBAIKAN: Mengurangi ruang kosong di bagian paling atas halaman */
+    .block-container {
+        padding-top: 1.5rem !important; /* Nilai bawaannya sekitar 6rem, kita perkecil */
+        padding-bottom: 1rem !important;
+    }
+
+    /* 1. Ukuran font Judul Utama (st.title) dan tarik ke atas */
     h1 {
         font-size: 34px !important;
+        margin-top: -1.5rem !important; /* Menarik teks judul lebih ke atas */
+        padding-top: 0rem !important;
     }
     
     /* 2. Ukuran font Header (st.header) */
