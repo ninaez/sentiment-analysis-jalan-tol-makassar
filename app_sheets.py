@@ -24,10 +24,10 @@ st.markdown("""
 
     /* 2. KUNCI PERBAIKAN: Mengurangi ruang kosong di atas SIDEBAR */
     [data-testid="stSidebarUserContent"] {
-        padding-top: 2rem !important;
+        padding-top: 1.5rem !important;
     }
     [data-testid="stSidebar"] .block-container {
-        padding-top: 2rem !important;
+        padding-top: 1.5rem !important;
     }
 
     /* 3. Ukuran font Judul Utama (st.title) */
