@@ -191,15 +191,22 @@ if not gsheets_url:
 else:
     # ----------------------------------------------------
     # FILTER RENTANG TANGGAL (Pindah ke Main Area)
-    # Dibuat minimalis dengan kolom kecil di kiri
+    # KUNCI PERBAIKAN: Layout sejajar dengan Teks "Periode waktu"
     # ----------------------------------------------------
     st.write("<hr style='margin-top: 10px; margin-bottom: 15px;'>", unsafe_allow_html=True)
     
-    col_d1, col_d2, col_d3 = st.columns([1.5, 1.5, 5])
+    # Membuat 4 kolom: 1 untuk label, 2 untuk input tanggal, 1 sisanya dibiarkan kosong agar tidak melebar
+    col_label, col_d1, col_d2, col_blank = st.columns([1.5, 2, 2, 4.5])
+    
+    with col_label:
+        # Menambahkan padding atas agar sejajar dengan input box
+        st.markdown("<div style='padding-top: 32px; font-size: 16px; font-weight: bold; color: #333;'>Periode waktu</div>", unsafe_allow_html=True)
+    
     with col_d1:
-        tanggal_mulai = st.date_input("📅 Tanggal Mulai")
+        tanggal_mulai = st.date_input("Tanggal mulai (slicer)")
+        
     with col_d2:
-        tanggal_selesai = st.date_input("📅 Tanggal Selesai")
+        tanggal_selesai = st.date_input("Tanggal selesai (slicer)")
         
     st.write("<br>", unsafe_allow_html=True)
     # ----------------------------------------------------
