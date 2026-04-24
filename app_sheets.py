@@ -72,7 +72,7 @@ with st.sidebar:
     st.header("Konfigurasi Analisis")
     
     st.subheader("1. Sumber Data")
-    gsheets_url = st.text_input("Link Google Sheets:", placeholder="Tempel link yang sudah diset 'Anyone with the link' di sini...")
+    gsheets_url = st.text_input("Link Google Sheets:", placeholder="Share setting: 'Anyone with the link' (Viewer)")
     
     st.write("---")
     
