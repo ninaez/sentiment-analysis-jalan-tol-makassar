@@ -69,7 +69,7 @@ def load_data_from_gsheets(url):
 # SIDEBAR (MENU PENGATURAN DI SAMPING)
 # ==========================================
 with st.sidebar:
-    st.header("⚙️ Pengaturan Analisis")
+    st.header("Konfigurasi Analisis")
     
     st.subheader("1. Sumber Data")
     gsheets_url = st.text_input("Link Google Sheets:", placeholder="Tempel link yang sudah diset 'Anyone with the link' di sini...")
@@ -144,7 +144,7 @@ if topik_baru_spesifik.strip() != "":
 # AREA UTAMA: PROSES DATA
 # ==========================================
 if not gsheets_url:
-    st.info("👈 Silakan masukkan Link Google Sheets Anda di menu sebelah kiri (sidebar) untuk memulai analisis.")
+    st.info("Silakan masukkan Link Google Sheets Anda di menu sebelah kiri (sidebar) untuk memulai analisis.")
 else:
     df_raw = load_data_from_gsheets(gsheets_url)
     
@@ -186,7 +186,7 @@ else:
 
             df.to_csv(f"{OUTPUT_DIR}/1_Cleaned_Data.csv", index=False)
 
-            st.success(f"✅ Berhasil menarik {len(df)} baris data dari Google Sheets (Periode: {tanggal_mulai.strftime('%d %b %Y')} - {tanggal_selesai.strftime('%d %b %Y')}).")
+            st.success(f"Berhasil menarik {len(df)} baris data dari Google Sheets (Periode: {tanggal_mulai.strftime('%d %b %Y')} - {tanggal_selesai.strftime('%d %b %Y')}).")
             
             # VISUALISASI
             col1, col2 = st.columns(2)
