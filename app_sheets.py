@@ -65,41 +65,9 @@ def load_data_from_gsheets(url):
         st.error(f"❌ Gagal membaca data. Pastikan link benar dan aksesnya 'Anyone with the link'. Detail: {e}")
         return None
 
-# ==========================================
-# SIDEBAR (MENU PENGATURAN DI SAMPING)
-# ==========================================
-with st.sidebar:
-    st.header("Konfigurasi Analisis")
-    
-    st.subheader("1. Sumber Data")
-    gsheets_url = st.text_input("Link Google Sheets:", placeholder="Tempel link yang sudah diset 'Anyone with the link' di sini...")
-    
-    st.write("---")
-    
-    st.subheader("2. Filter Rentang Waktu")
-    tanggal_mulai = st.date_input("Tanggal Mulai")
-    tanggal_selesai = st.date_input("Tanggal Selesai")
-    
-    st.write("---")
-    
-    st.subheader("3. Pengumuman Tarif")
-    ada_penyesuaian_tarif = st.checkbox("Ada penyesuaian tarif dalam rentang ini?")
-    tanggal_pengumuman = st.text_input("Tanggal Pengumuman (YYYY-MM-DD, pisahkan koma)", "2026-01-01, 2026-01-02")
-    
-    st.write("---")
-    
-    st.subheader("4. Tambah Topik Baru")
-    topik_baru_spesifik = st.text_input("Topik Spesifik Baru (Opsional)")
-    kategori_general = ["Infrastruktur & Kondisi Jalan", "Tarif & Biaya", "Layanan & Sistem Operasional", "Keamanan & Lalu Lintas", "Interaksi & Lainnya", "Tidak Spesifik"]
-    topik_baru_general = st.selectbox("Masuk ke Kategori General:", kategori_general, index=5)
-    
-    st.write("---")
-    
-    st.subheader("5. Pengaturan Kata Buang")
-    kata_buang_tambahan = st.text_area("Kata yang ingin dihilangkan dari Wordcloud (pisahkan koma):", "tol, makassar, min, jalan, fyp")
 
 # ==========================================
-# PERSIAPAN SISTEM & KAMUS
+# PERSIAPAN SISTEM & KAMUS (DIPINDAH KE ATAS)
 # ==========================================
 OUTPUT_DIR = "Hasil_Analisis_Sentimen_Live"
 if not os.path.exists(OUTPUT_DIR): 
@@ -137,8 +105,50 @@ topic_mapping = {
     'Tidak spesifik': 'Tidak Spesifik'
 }
 
+# ==========================================
+# SIDEBAR (MENU PENGATURAN DI SAMPING)
+# ==========================================
+with st.sidebar:
+    st.header("Konfigurasi Analisis")
+    
+    st.subheader("1. Sumber Data")
+    gsheets_url = st.text_input("Link Google Sheets:", placeholder="Tempel link yang sudah diset 'Anyone with the link' di sini...")
+    
+    st.write("---")
+    
+    st.subheader("2. Filter Rentang Waktu")
+    tanggal_mulai = st.date_input("Tanggal Mulai")
+    tanggal_selesai = st.date_input("Tanggal Selesai")
+    
+    st.write("---")
+    
+    st.subheader("3. Pengumuman Tarif")
+    ada_penyesuaian_tarif = st.checkbox("Ada penyesuaian tarif dalam rentang ini?")
+    tanggal_pengumuman = st.text_input("Tanggal Pengumuman (YYYY-MM-DD, pisahkan koma)", "2026-01-01, 2026-01-02")
+    
+    st.write("---")
+    
+    st.subheader("4. Tambah Topik Baru")
+    
+    # KUNCI PERBAIKAN: Menambahkan Expander untuk melihat list topik yang sudah ada
+    with st.expander("👀 Lihat Daftar Topik Spesifik"):
+        st.caption("Daftar topik yang saat ini sudah terdaftar di sistem:")
+        # Mengambil semua topik spesifik dan mengurutkannya sesuai abjad agar mudah dibaca
+        for existing_topic in sorted(topic_mapping.keys()):
+            st.markdown(f"- {existing_topic}")
+            
+    topik_baru_spesifik = st.text_input("Topik Spesifik Baru (Opsional)")
+    kategori_general = ["Infrastruktur & Kondisi Jalan", "Tarif & Biaya", "Layanan & Sistem Operasional", "Keamanan & Lalu Lintas", "Interaksi & Lainnya", "Tidak Spesifik"]
+    topik_baru_general = st.selectbox("Masuk ke Kategori General:", kategori_general, index=5)
+    
+    st.write("---")
+    
+    st.subheader("5. Pengaturan Kata Buang")
+    kata_buang_tambahan = st.text_area("Kata yang ingin dihilangkan dari Wordcloud (pisahkan koma):", "tol, makassar, min, jalan, fyp")
+
 if topik_baru_spesifik.strip() != "":
     topic_mapping[topik_baru_spesifik.strip()] = topik_baru_general
+
 
 # ==========================================
 # AREA UTAMA: PROSES DATA
@@ -196,7 +206,7 @@ else:
             plat_count = df['platform_group'].value_counts().reset_index(name='Total')
             fig_p = px.bar(plat_count, x='platform_group', y='Total', title='Distribusi Komentar Per-Platform', text='Total', color_discrete_sequence=[MUN_BLUE])
             
-            # KUNCI PERBAIKAN: Paksa teks di atas bar jika sempit & hilangkan judul sumbu
+            # Paksa teks di atas bar jika sempit & hilangkan judul sumbu
             fig_p.update_traces(textposition='auto', cliponaxis=False)
             fig_p.update_layout(xaxis_title=None, yaxis_title=None, margin=dict(t=50))
             
@@ -212,7 +222,7 @@ else:
                                 text='Total', color='platform_detail', 
                                 color_discrete_map={'Komentar Instagram': MUN_BLUE, 'DM Instagram': '#5FA5EB'})
                 
-                # KUNCI PERBAIKAN: Paksa teks di atas bar jika sempit & hilangkan judul sumbu/legenda
+                # Paksa teks di atas bar jika sempit & hilangkan judul sumbu/legenda
                 fig_ig.update_traces(textposition='auto', cliponaxis=False)
                 fig_ig.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='', margin=dict(t=50))
                 
@@ -235,7 +245,7 @@ else:
             df_trend = df.groupby([df['date'].dt.date, 'category']).size().reset_index(name='Total')
             fig_line = px.line(df_trend, x='date', y='Total', color='category', title='Tren Sentimen Harian', color_discrete_map=COLOR_MAP, markers=True)
             
-            # KUNCI PERBAIKAN: Menghilangkan judul sumbu X, sumbu Y, dan judul legenda
+            # Menghilangkan judul sumbu X, sumbu Y, dan judul legenda
             fig_line.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='')
             
             fig_line.write_html(f"{OUTPUT_DIR}/Chart_3_Sentiment_Trend.html")
@@ -248,9 +258,8 @@ else:
                                   barmode='group', title='Perbandingan: Konten Reguler vs Pengumuman Tarif', 
                                   text='Total', color_discrete_map=COLOR_MAP)
                 
-                # KUNCI PERBAIKAN: 
-                # 1. 'auto' akan menaruh angka di dalam jika cukup, dan di luar jika sempit.
-                # 2. 'cliponaxis=False' memastikan angka di luar tidak terpotong garis bingkai.
+                # 'auto' akan menaruh angka di dalam jika cukup, dan di luar jika sempit.
+                # 'cliponaxis=False' memastikan angka di luar tidak terpotong garis bingkai.
                 fig_comp.update_traces(textposition='auto', cliponaxis=False)
                 
                 # Menghilangkan judul sumbu X, sumbu Y, dan judul legenda
@@ -258,7 +267,6 @@ else:
                     xaxis_title=None, 
                     yaxis_title=None, 
                     legend_title_text='',
-                    # Memastikan margin atas cukup jika angka pindah ke luar bar paling tinggi
                     margin=dict(t=50) 
                 )
                 
@@ -306,7 +314,6 @@ else:
                     fig_g.update_layout(
                         title={'text': f'Topik General - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10.5}},
-                        # KUNCI PERBAIKAN: Menghilangkan judul sumbu X ('Total')
                         xaxis={'title': ''},
                         height=tinggi_grafik_g
                     )
@@ -320,7 +327,6 @@ else:
                     fig_s.update_layout(
                         title={'text': f'Topik Spesifik - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10.5}}, 
-                        # KUNCI PERBAIKAN: Menghilangkan judul sumbu X ('Total')
                         xaxis={'title': ''},
                         height=tinggi_grafik_s
                     )
@@ -336,9 +342,9 @@ else:
             # Gunakan set kosong agar murni menggunakan kata buang
             all_stopwords = set() 
             
-            # Daftar kata buang gabungan (Lama + Baru)
+            # Daftar kata buang gabungan
             base_exclusions = {
-                '2x', '3x', '5k', '5km', '89xx', 'acar', 'acara', 'ada', 'adalah', 'adanya', 
+                '2x', '3x', '5k', '89xx', 'acar', 'acara', 'ada', 'adalah', 'adanya', 
                 'adik', 'admin', 'aja', 'ajang', 'akan', 'alasan', 'allah', 'ambil', 
                 'ancinikko', 'anda', 'anjay', 'anuu', 'apa', 'apalagi', 'apk', 'arah', 
                 'area', 'arus', 'atas', 'atau', 'auto', 'bagian', 'bahwa', 'baik2', 
