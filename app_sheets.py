@@ -147,10 +147,8 @@ with st.sidebar:
     
     st.subheader("4. Tambah Topik Baru")
     
-    # KUNCI PERBAIKAN: Menambahkan Expander untuk melihat list topik yang sudah ada
     with st.expander("Lihat Daftar Topik Spesifik"):
         st.caption("Daftar topik yang saat ini sudah terdaftar di sistem:")
-        # Mengambil semua topik spesifik dan mengurutkannya sesuai abjad agar mudah dibaca
         for existing_topic in sorted(topic_mapping.keys()):
             st.markdown(f"- {existing_topic}")
             
@@ -191,16 +189,14 @@ else:
             # ----------------------------------------------------
             # FILTER RENTANG TANGGAL (Slicer)
             # ----------------------------------------------------
-            # Konversi input date st.date_input ke format datetime pandas
             start_date = pd.to_datetime(tanggal_mulai)
             end_date = pd.to_datetime(tanggal_selesai)
             
-            # Terapkan filter
             df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
             
             if df.empty:
                 st.warning("⚠️ Tidak ada data sentimen yang ditemukan pada rentang tanggal tersebut.")
-                st.stop() # Hentikan proses jika data kosong
+                st.stop()
             # ----------------------------------------------------
 
             df['content_type'] = 'Konten Reguler'
@@ -214,6 +210,46 @@ else:
             df.to_csv(f"{OUTPUT_DIR}/1_Cleaned_Data.csv", index=False)
 
             st.success(f"Berhasil menarik {len(df)} baris data dari Google Sheets (Periode: {tanggal_mulai.strftime('%d %b %Y')} - {tanggal_selesai.strftime('%d %b %Y')}).")
+
+            # ----------------------------------------------------
+            # KARTU RINGKASAN & PERSENTASE SENTIMEN
+            # ----------------------------------------------------
+            total_komentar = len(df)
+            
+            if 'usrnm_cmmnt' in df.columns:
+                total_user = df['usrnm_cmmnt'].nunique()
+            else:
+                total_user = 0
+                st.warning("⚠️ Kolom 'usrnm_cmmnt' tidak ditemukan di dataset untuk menghitung Unique User.")
+
+            # Hitung persentase sentimen
+            sent_counts = df['category'].value_counts(normalize=True) * 100
+            pct_positif = sent_counts.get('Positif', 0)
+            pct_netral = sent_counts.get('Netral', 0)
+            pct_negatif = sent_counts.get('Negatif', 0)
+
+            # Buat 5 kolom sejajar
+            c1, c2, c3, c4, c5 = st.columns(5)
+            
+            # Desain CSS untuk meniru gambar referensi (Putih, border abu-abu, teks di tengah)
+            card_css = "background-color: white; border: 1px solid #e1e8ed; padding: 20px 10px; border-radius: 8px; text-align: center; box-shadow: 1px 1px 5px rgba(0,0,0,0.04);"
+            title_css = "margin: 0 0 10px 0; font-size: 14px; font-weight: bold; color: #14171a;"
+            
+            with c1:
+                # Menggunakan warna biru cerah (ala Twitter) untuk metrik umum
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Total Komentar</p><h1 style="margin: 0; font-size: 36px; color: #00AEEF;">{total_komentar}</h1></div>', unsafe_allow_html=True)
+            with c2:
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Unique User</p><h1 style="margin: 0; font-size: 36px; color: #00AEEF;">{total_user}</h1></div>', unsafe_allow_html=True)
+            with c3:
+                # Menggunakan warna dari COLOR_MAP untuk metrik sentimen
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">% Positif</p><h1 style="margin: 0; font-size: 36px; color: {MUN_BLUE};">{pct_positif:.1f}%</h1></div>', unsafe_allow_html=True)
+            with c4:
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">% Netral</p><h1 style="margin: 0; font-size: 36px; color: {MUN_YELLOW};">{pct_netral:.1f}%</h1></div>', unsafe_allow_html=True)
+            with c5:
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">% Negatif</p><h1 style="margin: 0; font-size: 36px; color: {MUN_RED};">{pct_negatif:.1f}%</h1></div>', unsafe_allow_html=True)
+
+            st.write("<br>", unsafe_allow_html=True)
+            # ----------------------------------------------------
             
             # VISUALISASI
             col1, col2 = st.columns(2)
@@ -223,7 +259,6 @@ else:
             plat_count = df['platform_group'].value_counts().reset_index(name='Total')
             fig_p = px.bar(plat_count, x='platform_group', y='Total', title='Distribusi Komentar Per-Platform', text='Total', color_discrete_sequence=[MUN_BLUE])
             
-            # Paksa teks di atas bar jika sempit & hilangkan judul sumbu
             fig_p.update_traces(textposition='auto', cliponaxis=False)
             fig_p.update_layout(xaxis_title=None, yaxis_title=None, margin=dict(t=50))
             
@@ -239,32 +274,18 @@ else:
                                 text='Total', color='platform_detail', 
                                 color_discrete_map={'Komentar Instagram': MUN_BLUE, 'DM Instagram': '#5FA5EB'})
                 
-                # Paksa teks di atas bar jika sempit & hilangkan judul sumbu/legenda
                 fig_ig.update_traces(textposition='auto', cliponaxis=False)
                 fig_ig.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='', margin=dict(t=50))
                 
                 fig_ig.write_html(f"{OUTPUT_DIR}/Chart_1.1_Instagram_Breakdown.html")
                 with col2: st.plotly_chart(fig_ig, use_container_width=True)
                     
-            # V2. Distribusi Sentimen
-            sent_count = df['category'].value_counts().reset_index(name='Total')
-            sent_count['Legend_Label'] = sent_count['category'] + ' (' + sent_count['Total'].astype(str) + ')'
-            DYNAMIC_COLOR_MAP = {row['Legend_Label']: COLOR_MAP.get(row['category'], 'gray') for idx, row in sent_count.iterrows()}
-            
-            fig_pie = px.pie(sent_count, names='Legend_Label', values='Total', title='Persentase Sentimen Keseluruhan', 
-                             color='Legend_Label', color_discrete_map=DYNAMIC_COLOR_MAP, hole=0.3)
-            fig_pie.update_traces(textinfo='percent', textfont_size=14, hovertemplate='%{label}<br>Persentase: %{percent}<extra></extra>')
-            fig_pie.update_layout(legend_title_text='Kategori Sentimen (Total)')
-            fig_pie.write_html(f"{OUTPUT_DIR}/Chart_2_Sentiment_Pie.html")
-            st.plotly_chart(fig_pie, use_container_width=True)
+            # (PIE CHART DIHAPUS)
 
             # V3. Tren Sentimen (Stacked Bar Chart)
             df_trend = df.groupby([df['date'].dt.date, 'category']).size().reset_index(name='Total')
             
-            # KUNCI PERBAIKAN: Mengganti px.line menjadi px.bar
             fig_trend = px.bar(df_trend, x='date', y='Total', color='category', title='Tren Sentimen Harian', color_discrete_map=COLOR_MAP)
-            
-            # Menghilangkan judul sumbu X, sumbu Y, dan judul legenda
             fig_trend.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='')
             
             fig_trend.write_html(f"{OUTPUT_DIR}/Chart_3_Sentiment_Trend.html")
@@ -277,11 +298,7 @@ else:
                                   barmode='group', title='Perbandingan: Konten Reguler vs Pengumuman Tarif', 
                                   text='Total', color_discrete_map=COLOR_MAP)
                 
-                # 'auto' akan menaruh angka di dalam jika cukup, dan di luar jika sempit.
-                # 'cliponaxis=False' memastikan angka di luar tidak terpotong garis bingkai.
                 fig_comp.update_traces(textposition='auto', cliponaxis=False)
-                
-                # Menghilangkan judul sumbu X, sumbu Y, dan judul legenda
                 fig_comp.update_layout(
                     xaxis_title=None, 
                     yaxis_title=None, 
@@ -303,7 +320,6 @@ else:
             st.write("---")
             st.write("### Analisis Topik Berdasarkan Sentimen")
 
-            # Definisikan fungsi wrap di luar loop agar lebih efisien
             def wrap_text_25(text):
                 text = str(text)
                 if len(text) > 25:
@@ -358,10 +374,8 @@ else:
             st.write("---")
             st.write("### Wordcloud Sentimen")
             
-            # Gunakan set kosong agar murni menggunakan kata buang
             all_stopwords = set() 
             
-            # Daftar kata buang gabungan
             base_exclusions = {
                 '2x', '3x', '5k', '89xx', 'acar', 'acara', 'ada', 'adalah', 'adanya', 
                 'adik', 'admin', 'aja', 'ajang', 'akan', 'alasan', 'allah', 'ambil', 
@@ -416,9 +430,7 @@ else:
             
             all_stopwords.update(base_exclusions)
 
-            # Tambahkan input dari Text Area Sidebar (PEMBERSIHAN SPASI)
             if kata_buang_tambahan.strip() != "":
-                # Gunakan .strip() pada tiap kata agar spasi hantu hilang
                 user_words = [w.strip().lower() for w in kata_buang_tambahan.split(',') if w.strip()]
                 all_stopwords.update(user_words)
 
@@ -428,14 +440,13 @@ else:
                 if len(sub) > 0:
                     text_data = " ".join(str(comment) for comment in sub.text).lower()
                     
-                    # Buat objek WordCloud dulu dengan stopwords yang sudah kita rakit
                     wc_obj = WordCloud(
                         width=800, 
                         height=400, 
                         background_color='white', 
-                        stopwords=all_stopwords, # Lempar ke sini
+                        stopwords=all_stopwords,
                         colormap='viridis',
-                        collocations=False # Tambahkan ini agar kata tidak berulang (seperti 'mobil mobil')
+                        collocations=False
                     ).generate(text_data)
                     
                     fig_wc, ax = plt.subplots(figsize=(10, 5))
