@@ -22,7 +22,7 @@ st.markdown("""
         padding-bottom: 1rem !important;
     }
 
-    /* 2. Mengurangi ruang kosong di atas SIDEBAR */
+    /* 2. KUNCI PERBAIKAN: Mengurangi ruang kosong di atas SIDEBAR */
     [data-testid="stSidebarUserContent"] {
         padding-top: 1rem !important;
     }
@@ -33,7 +33,7 @@ st.markdown("""
     /* 3. Ukuran font Judul Utama (st.title) */
     h1 {
         font-size: 35px !important;
-        margin-top: 0rem !important; 
+        margin-top: 0rem !important; /* Pastikan tetap 0 agar tidak terpotong */
         padding-top: 0rem !important;
     }
     
@@ -55,7 +55,7 @@ st.markdown("""
     /* 7. Khusus mengubah ukuran Header di Sidebar */
     [data-testid="stSidebar"] h2 {
         font-size: 24px !important;
-        margin-top: -1rem !important; 
+        margin-top: -1rem !important; /* Menarik teks "Konfigurasi Analisis" sedikit lebih ke atas */
     }
     
     /* 8. Khusus mengubah ukuran Subheader di Sidebar */
@@ -68,15 +68,19 @@ st.markdown("""
 # ==========================================
 # BAGIAN HEADER & LOGO
 # ==========================================
+# Membuat 2 kolom: proporsi 1 untuk logo, proporsi 5 untuk judul agar pas
 col_logo, col_title = st.columns([1, 5])
 
 with col_logo:
+    # Masukkan nama file gambar Anda di sini. 
+    # Gunakan use_column_width=True agar ukurannya otomatis menyesuaikan kolom
     try:
         st.image("logo_MUN.png", use_container_width=True)
     except FileNotFoundError:
         st.error("File logo_MUN.png tidak ditemukan. Pastikan nama dan foldernya benar.")
 
 with col_title:
+    # Menggunakan HTML agar tampilan teks persis seperti referensi (2 baris atas bawah)
     st.markdown("""
         <h1 style='margin-bottom: 0px; padding-bottom: 0px;'>SENTIMENT ANALYSIS DASHBOARD</h1>
         <h3 style='margin-top: 0px; padding-top: 0px; margin-bottom: 0px; color: #333; font-weight: normal; line-height: 1.3;'>PT Makassar Metro Network<br>PT Makassar Airport Network
@@ -86,9 +90,10 @@ with col_title:
 # ==========================================
 # FUNGSI MEMBACA GOOGLE SHEETS
 # ==========================================
-@st.cache_data(ttl=300) 
+@st.cache_data(ttl=300) # Data di-cache selama 5 menit agar tidak terus-menerus menarik data
 def load_data_from_gsheets(url):
     try:
+        # Mengubah URL agar mengekspor sebagai CSV
         csv_url = url.replace('/edit?usp=sharing', '/export?format=csv')
         csv_url = re.sub(r'\/edit#gid=\d+', '/export?format=csv', csv_url)
         df = pd.read_csv(csv_url)
@@ -97,8 +102,9 @@ def load_data_from_gsheets(url):
         st.error(f"❌ Gagal membaca data. Pastikan link benar dan aksesnya 'Anyone with the link'. Detail: {e}")
         return None
 
+
 # ==========================================
-# PERSIAPAN SISTEM & KAMUS 
+# PERSIAPAN SISTEM & KAMUS (DIPINDAH KE ATAS)
 # ==========================================
 OUTPUT_DIR = "Hasil_Analisis_Sentimen_Live"
 if not os.path.exists(OUTPUT_DIR): 
@@ -145,10 +151,12 @@ with st.sidebar:
     st.subheader("1. Sumber Data")
     gsheets_url = st.text_input("Link Google Sheets:", placeholder="Tempel link yang sudah diset 'Anyone with the link' di sini...")
     
+    # Placeholder untuk pesan sukses (muncul di bawah input URL)
     status_data = st.empty() 
     
     st.write("---")
     
+    # Penomoran disesuaikan karena filter tanggal sudah dipindah ke Main Area
     st.subheader("2. Pengumuman Tarif")
     ada_penyesuaian_tarif = st.checkbox("Ada penyesuaian tarif dalam rentang ini?")
     tanggal_pengumuman = st.text_input("Tanggal Pengumuman (YYYY-MM-DD, pisahkan koma)", "2026-01-01, 2026-01-02")
@@ -174,6 +182,7 @@ with st.sidebar:
 if topik_baru_spesifik.strip() != "":
     topic_mapping[topik_baru_spesifik.strip()] = topik_baru_general
 
+
 # ==========================================
 # AREA UTAMA: PROSES DATA
 # ==========================================
@@ -181,22 +190,26 @@ if not gsheets_url:
     st.info("Silakan masukkan Link Google Sheets Anda di menu sebelah kiri (sidebar) untuk memulai analisis.")
 else:
     # ----------------------------------------------------
-    # FILTER RENTANG TANGGAL 
+    # FILTER RENTANG TANGGAL (Pindah ke Main Area)
     # ----------------------------------------------------
     st.write("<hr style='margin-top: 10px; margin-bottom: 15px;'>", unsafe_allow_html=True)
     
+    # Membuat 4 kolom: 1 untuk label, 2 untuk input tanggal, 1 sisanya dibiarkan kosong agar tidak melebar
     col_label, col_d1, col_d2, col_blank = st.columns([1.5, 2, 2, 4.5])
     
     with col_label:
         st.markdown("<div style='padding-top: 8px; font-size: 16px; font-weight: bold; color: #333;'>Periode waktu</div>", unsafe_allow_html=True)
     
     with col_d1:
+        # Menggunakan label_visibility="collapsed" untuk menyembunyikan label
         tanggal_mulai = st.date_input("Mulai", label_visibility="collapsed")
         
     with col_d2:
+        # Menggunakan label_visibility="collapsed" untuk menyembunyikan label
         tanggal_selesai = st.date_input("Selesai", label_visibility="collapsed")
         
     st.write("<br>", unsafe_allow_html=True)
+    # ----------------------------------------------------
 
     df_raw = load_data_from_gsheets(gsheets_url)
     
@@ -209,9 +222,11 @@ else:
             if 'platform' in df.columns:
                 df['platform'] = df['platform'].astype(str).str.strip().str.title().replace({'Tiktok': 'TikTok', 'Dm Instagram': 'DM Instagram'})
             
+            # Konversi Tanggal dan Buang baris yang tidak memiliki tanggal valid
             df['date'] = pd.to_datetime(df['date'], format='%m/%d/%Y', errors='coerce')
             df = df.dropna(subset=['date'])
             
+            # Filter Berdasarkan Input Tanggal Baru
             start_date = pd.to_datetime(tanggal_mulai)
             end_date = pd.to_datetime(tanggal_selesai)
             df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
@@ -230,6 +245,7 @@ else:
 
             df.to_csv(f"{OUTPUT_DIR}/1_Cleaned_Data.csv", index=False)
 
+            # Mengirim pesan sukses ke placeholder di sidebar
             status_data.success(f"Berhasil menarik {len(df)} baris data (Periode: {tanggal_mulai.strftime('%d %b %Y')} - {tanggal_selesai.strftime('%d %b %Y')}).")
 
             # ----------------------------------------------------
@@ -243,40 +259,35 @@ else:
                 total_user = 0
                 st.warning("⚠️ Kolom 'usrnm_cmmnt' tidak ditemukan di dataset untuk menghitung Unique User.")
 
+            # Hitung persentase sentimen
             sent_counts = df['category'].value_counts(normalize=True) * 100
             pct_positif = sent_counts.get('Positif', 0)
             pct_netral = sent_counts.get('Netral', 0)
             pct_negatif = sent_counts.get('Negatif', 0)
 
+            # Buat 5 kolom sejajar
             c1, c2, c3, c4, c5 = st.columns(5)
             
-            # KUNCI PERBAIKAN: Menambahkan display flex dan justify-content center agar rata tengah sempurna
-            card_css = """
-                background-color: white; 
-                border: 1px solid #e1e8ed; 
-                padding: 10px 5px; 
-                border-radius: 8px; 
-                text-align: center; /* Rata tengah teks */
-                box-shadow: 1px 1px 5px rgba(0,0,0,0.04);
-                display: flex; 
-                flex-direction: column; 
-                align-items: center; 
-                justify-content: center;
-            """
-            title_css = "margin: 0 0 5px 0; font-size: 14px; font-weight: bold; color: #14171a;"
+            # KUNCI PERBAIKAN: 
+            # 1. Menggunakan tag murni DIV untuk menghindari CSS bawaan Streamlit
+            # 2. padding: 15px 5px; memastikan simetris atas bawah
+            card_css = "background-color: white; border: 1px solid #e1e8ed; padding: 15px 5px; border-radius: 8px; text-align: center; box-shadow: 1px 1px 5px rgba(0,0,0,0.04);"
+            title_css = "margin: 0; padding-bottom: 5px; font-size: 14px; font-weight: bold; color: #14171a;"
+            val_css = "margin: 0; font-size: 32px; font-weight: bold;"
             
             with c1:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Total Komentar</p><h1 style="margin: 0; font-size: 32px; color: #00AEEF;">{total_komentar}</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><div style="{title_css}">Total Komentar</div><div style="{val_css} color: #00AEEF;">{total_komentar}</div></div>', unsafe_allow_html=True)
             with c2:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Unique User</p><h1 style="margin: 0; font-size: 32px; color: #00AEEF;">{total_user}</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><div style="{title_css}">Unique User</div><div style="{val_css} color: #00AEEF;">{total_user}</div></div>', unsafe_allow_html=True)
             with c3:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Positif</p><h1 style="margin: 0; font-size: 32px; color: {MUN_BLUE};">{pct_positif:.1f}%</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><div style="{title_css}">Positif</div><div style="{val_css} color: {MUN_BLUE};">{pct_positif:.1f}%</div></div>', unsafe_allow_html=True)
             with c4:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Netral</p><h1 style="margin: 0; font-size: 32px; color: {MUN_YELLOW};">{pct_netral:.1f}%</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><div style="{title_css}">Netral</div><div style="{val_css} color: {MUN_YELLOW};">{pct_netral:.1f}%</div></div>', unsafe_allow_html=True)
             with c5:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Negatif</p><h1 style="margin: 0; font-size: 32px; color: {MUN_RED};">{pct_negatif:.1f}%</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><div style="{title_css}">Negatif</div><div style="{val_css} color: {MUN_RED};">{pct_negatif:.1f}%</div></div>', unsafe_allow_html=True)
 
             st.write("<br>", unsafe_allow_html=True)
+            # ----------------------------------------------------
             
             # VISUALISASI
             col1, col2 = st.columns(2)
@@ -306,7 +317,7 @@ else:
                 
                 fig_ig.write_html(f"{OUTPUT_DIR}/Chart_1.1_Instagram_Breakdown.html")
                 with col2: st.plotly_chart(fig_ig, use_container_width=True)
-
+                    
             # V3. Tren Sentimen (Stacked Bar Chart)
             df_trend = df.groupby([df['date'].dt.date, 'category']).size().reset_index(name='Total')
             
