@@ -24,7 +24,7 @@ st.markdown("""
 
     /* 2. KUNCI PERBAIKAN: Mengurangi ruang kosong di atas SIDEBAR */
     [data-testid="stSidebarUserContent"] {
-        padding-top: 2.5rem !important;
+        padding-top: 2rem !important;
     }
     [data-testid="stSidebar"] .block-container {
         padding-top: 2rem !important;
