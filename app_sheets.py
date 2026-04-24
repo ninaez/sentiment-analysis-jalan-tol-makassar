@@ -32,7 +32,7 @@ st.markdown("""
 
     /* 3. Ukuran font Judul Utama (st.title) */
     h1 {
-        font-size: 32px !important;
+        font-size: 35px !important;
         margin-top: 0rem !important; /* Pastikan tetap 0 agar tidak terpotong */
         padding-top: 0rem !important;
     }
@@ -151,24 +151,19 @@ with st.sidebar:
     st.subheader("1. Sumber Data")
     gsheets_url = st.text_input("Link Google Sheets:", placeholder="Tempel link yang sudah diset 'Anyone with the link' di sini...")
     
-    # KUNCI PERBAIKAN: Memesan tempat kosong (placeholder) tepat di bawah input teks
+    # Placeholder untuk pesan sukses (muncul di bawah input URL)
     status_data = st.empty() 
     
     st.write("---")
     
-    st.subheader("2. Filter Rentang Waktu")
-    tanggal_mulai = st.date_input("Tanggal Mulai")
-    tanggal_selesai = st.date_input("Tanggal Selesai")
-    
-    st.write("---")
-    
-    st.subheader("3. Pengumuman Tarif")
+    # Penomoran disesuaikan karena filter tanggal sudah dipindah ke Main Area
+    st.subheader("2. Pengumuman Tarif")
     ada_penyesuaian_tarif = st.checkbox("Ada penyesuaian tarif dalam rentang ini?")
     tanggal_pengumuman = st.text_input("Tanggal Pengumuman (YYYY-MM-DD, pisahkan koma)", "2026-01-01, 2026-01-02")
     
     st.write("---")
     
-    st.subheader("4. Tambah Topik Baru")
+    st.subheader("3. Tambah Topik Baru")
     
     with st.expander("Lihat Daftar Topik Spesifik"):
         st.caption("Daftar topik yang saat ini sudah terdaftar di sistem:")
@@ -181,7 +176,7 @@ with st.sidebar:
     
     st.write("---")
     
-    st.subheader("5. Pengaturan Kata Buang")
+    st.subheader("4. Pengaturan Kata Buang")
     kata_buang_tambahan = st.text_area("Kata yang ingin dihilangkan dari Wordcloud (pisahkan koma):", "tol, makassar, min, jalan, fyp")
 
 if topik_baru_spesifik.strip() != "":
@@ -194,6 +189,21 @@ if topik_baru_spesifik.strip() != "":
 if not gsheets_url:
     st.info("Silakan masukkan Link Google Sheets Anda di menu sebelah kiri (sidebar) untuk memulai analisis.")
 else:
+    # ----------------------------------------------------
+    # FILTER RENTANG TANGGAL (Pindah ke Main Area)
+    # Dibuat minimalis dengan kolom kecil di kiri
+    # ----------------------------------------------------
+    st.write("<hr style='margin-top: 10px; margin-bottom: 15px;'>", unsafe_allow_html=True)
+    
+    col_d1, col_d2, col_d3 = st.columns([1.5, 1.5, 5])
+    with col_d1:
+        tanggal_mulai = st.date_input("📅 Tanggal Mulai")
+    with col_d2:
+        tanggal_selesai = st.date_input("📅 Tanggal Selesai")
+        
+    st.write("<br>", unsafe_allow_html=True)
+    # ----------------------------------------------------
+
     df_raw = load_data_from_gsheets(gsheets_url)
     
     if df_raw is not None:
@@ -209,18 +219,14 @@ else:
             df['date'] = pd.to_datetime(df['date'], format='%m/%d/%Y', errors='coerce')
             df = df.dropna(subset=['date'])
             
-            # ----------------------------------------------------
-            # FILTER RENTANG TANGGAL (Slicer)
-            # ----------------------------------------------------
+            # Filter Berdasarkan Input Tanggal Baru
             start_date = pd.to_datetime(tanggal_mulai)
             end_date = pd.to_datetime(tanggal_selesai)
-            
             df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
             
             if df.empty:
                 st.warning("⚠️ Tidak ada data sentimen yang ditemukan pada rentang tanggal tersebut.")
                 st.stop()
-            # ----------------------------------------------------
 
             df['content_type'] = 'Konten Reguler'
             if ada_penyesuaian_tarif:
@@ -232,7 +238,7 @@ else:
 
             df.to_csv(f"{OUTPUT_DIR}/1_Cleaned_Data.csv", index=False)
 
-            # KUNCI PERBAIKAN: Mengirim pesan sukses ke placeholder di sidebar yang sudah disiapkan sebelumnya
+            # Mengirim pesan sukses ke placeholder di sidebar
             status_data.success(f"Berhasil menarik {len(df)} baris data (Periode: {tanggal_mulai.strftime('%d %b %Y')} - {tanggal_selesai.strftime('%d %b %Y')}).")
 
             # ----------------------------------------------------
