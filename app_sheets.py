@@ -211,12 +211,12 @@ else:
                                 text='Total', color='platform_detail', 
                                 color_discrete_map={'Komentar Instagram': MUN_BLUE, 'DM Instagram': '#5FA5EB'})
                 
-                # KUNCI PERBAIKAN: Menghilangkan judul sumbu X dan Y
-                fig_ig.update_layout(xaxis_title=None, yaxis_title=None)
+                # KUNCI PERBAIKAN: Tambahkan legend_title_text='' di sini
+                fig_ig.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='')
                 
                 fig_ig.write_html(f"{OUTPUT_DIR}/Chart_1.1_Instagram_Breakdown.html")
                 with col2: st.plotly_chart(fig_ig, use_container_width=True)
-
+                    
             # V2. Distribusi Sentimen
             sent_count = df['category'].value_counts().reset_index(name='Total')
             sent_count['Legend_Label'] = sent_count['category'] + ' (' + sent_count['Total'].astype(str) + ')'
