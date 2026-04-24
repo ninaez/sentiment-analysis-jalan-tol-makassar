@@ -84,7 +84,7 @@ with st.sidebar:
     
     st.subheader("3. Pengumuman Tarif")
     ada_penyesuaian_tarif = st.checkbox("Ada penyesuaian tarif dalam rentang ini?")
-    tanggal_pengumuman = st.text_input("Tanggal Pengumuman (YYYY-MM-DD, pisahkan koma)", "2026-04-01, 2026-03-05")
+    tanggal_pengumuman = st.text_input("Tanggal Pengumuman (YYYY-MM-DD, pisahkan koma)", "2026-01-01, 2026-01-02")
     
     st.write("---")
     
