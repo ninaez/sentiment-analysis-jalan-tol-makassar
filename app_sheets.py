@@ -258,10 +258,10 @@ else:
                     # Menyisipkan 'enter' (<br>) setelah tanda '&'
                     g_count['label_general'] = g_count['general_topic'].str.replace(' & ', ' &<br>')
                     
-                    # KUNCI PERBAIKAN: Hitung tinggi SECARA TERPISAH menggunakan PENGALI YANG SAMA (35px per bar)
+                    # KUNCI PERBAIKAN: Hitung tinggi SECARA TERPISAH menggunakan PENGALI YANG SAMA (33px per bar)
                     # Ini akan membuat ketebalan batang di kiri dan kanan konsisten
-                    tinggi_grafik_g = max(200, 150 + (len(g_count) * 30))
-                    tinggi_grafik_s = max(200, 150 + (len(s_count) * 30))
+                    tinggi_grafik_g = max(200, 150 + (len(g_count) * 33))
+                    tinggi_grafik_s = max(200, 150 + (len(s_count) * 33))
                     
                     # General
                     fig_g = px.bar(g_count, x='Total', y='label_general', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
