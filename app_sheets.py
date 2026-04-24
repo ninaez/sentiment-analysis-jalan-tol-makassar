@@ -251,13 +251,17 @@ else:
                     # Kolom General (1 bagian) dan Kolom Spesifik (2 bagian / 2x lebih lebar)
                     col_g, col_s = st.columns([1, 2])
                     
+                    # Hitung data
                     g_count = sub['general_topic'].value_counts().reset_index(name='Total')
                     s_count = sub['topic_list'].value_counts().reset_index(name='Total')
                     
+                    # KUNCI PERBAIKAN: Menyisipkan 'enter' (<br>) setelah tanda '&'
+                    g_count['label_general'] = g_count['general_topic'].str.replace(' & ', ' &<br>')
+                    
                     tinggi_grafik = max(450, len(s_count) * 25)
                     
-                    # General
-                    fig_g = px.bar(g_count, x='Total', y='general_topic', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
+                    # General (Perhatikan bagian y='label_general')
+                    fig_g = px.bar(g_count, x='Total', y='label_general', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_g.update_layout(
                         title={'text': f'Topik General - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         yaxis={'categoryorder':'total ascending', 'title': ''}, 
