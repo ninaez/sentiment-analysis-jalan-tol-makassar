@@ -332,59 +332,77 @@ else:
             # V6. Wordcloud
             st.write("---")
             st.write("### Wordcloud Sentimen")
-            custom_exclusions = {'2x', '89xx', 'acar', 'ada', 'adanya', 'aja', 'akan', 'ancinikko', 'anjay', 
-                                 'anuu', 'apa', 'apk', 'arah', 'arus', 'atau', 'auto', 'bagian', 'bahwa', 
-                                 'baik2', 'baku', 'banget', 'banyak', 'banyakji', 'baru', 'barusan', 'batas', 
-                                 'bawa', 'begini', 'benarko', 'berada', 'bersama', 'berulahko', 'bgt', 'bgtu', 
-                                 'biar', 'bikin', 'bisa', 'bisaji', 'bisajikah', 'bkn', 'boss', 'bro', 'bsa', 
-                                 'bukan', 'cara', 'd', 'dah', 'dahhh', 'dalam', 'dan', 'dari', 'dd', 'dengan', 
-                                 'di', 'dimna', 'dipahami', 'disimak', 'dlu', 'dpatji', 'dr', 'dri', 'dudui', 
-                                 'fyp', 'gak', 'gampng', 'gel', 'gimana', 'gini', 'gk', 'guys', 'haah', 
-                                 'hampir', 'hanya', 'hari', 'heeh', 'heheee', 'hingga', 'ia', 'id', 'info', 
-                                 'informasi', 'infotolmakassar', 'ini', 'ir', 'itu', 'jadi', 'jalan', 'jam', 
-                                 'jan', 'jangan', 'jd', 'jeli', 'jg', 'jgn', 'ji', 'jkt', 'jln', 'juga', 
-                                 'justru', 'ka', 'kaau', 'kah', 'kak', 'kalau', 'kali', 'kalo', 'kampungan', 
-                                 'kan', 'kanda', 'kapan', 'karena', 'karna', 'katanya', 'kaumi', 'kaya', 
-                                 'kdng', 'ke', 'kenapa', 'kepada', 'keterangan', 'ki', 'kidc', 'kini', 'klo', 
-                                 'ko', 'kodong', 'kok', 'krna', 'ku', 'kyk', 'lagi', 'lah', 'lain', 'lalang', 
-                                 'lalu', 'lebih', 'lewat', 'liat', 'lima', 'makassar', 'makassarkah', 
-                                 'makanya', 'mako', 'maksd', 'mamo', 'mana', 'maros', 'masa', 'masih', 
-                                 'masing2', 'mau', 'maw', 'melakukan', 'melalui', 'memang', 'menjalankan', 
-                                 'menjadi', 'mereka', 'merupakan', 'meski', 'mi', 'min', 'mko', 'mmg', 'msh', 
-                                 'mslh', 'na', 'nai', 'namun', 'natau', 'nda', 'ndada', 'ndak', 'news', 
-                                 'ngampung', 'ni', 'nih', 'nu', 'nupikir', 'nusantara', 'nya', 'ok', 'oleh', 
-                                 'om', 'orang', 'org2', 'orng', 'pada', 'pas', 'pasti', 'pembangunan', 
-                                 'penyebab', 'pernah', 'pinggir', 'potong', 'pun', 'punya', 'ri', 'saat', 
-                                 'saja', 'sambil', 'sampe', 'sangat', 'saya', 'sebelum', 'sedeng', 'sedsng', 
-                                 'sejumlah', 'sekali', 'seksi', 'sekitar', 'selalu', 'sementara', 'semoga', 
-                                 'semua', 'semuaji', 'seorang', 'sering', 'serta', 'setelah', 'soal', 'sok', 
-                                 'sotr', 'sudah', 'sudahmi', 'supaya', 'suryadi', 'sy', 'tabe', 'tahun', 'tak', 
-                                 'talliwa', 'tau', 'tauji', 'td', 'tdk', 'tempat', 'tengah', 'tepatnya', 
-                                 'terasa', 'terhadap', 'terimakasih', 'terjadi', 'terkait', 'ternyata', 
-                                 'tersebut', 'terus', 'th', 'tiap', 'tidak', 'tol', 'toll', 'tolo', 'tp', 
-                                 'tpi', 'trus', 'tuh', 'ucap', 'umum', 'untuk', 'ya', 'yaa', 'yaaa', 'yah', 
-                                 'yang', 'yg'
-                                }
             
-            if kata_buang_tambahan.strip() != "":
-                user_stopwords = {kata.strip().lower() for kata in kata_buang_tambahan.split(',') if kata.strip() != ""}
-                custom_exclusions = custom_exclusions.union(user_stopwords)
+            # Gunakan set kosong agar murni menggunakan kata buang kita
+            all_stopwords = set() 
+            
+            # Daftar kata buang bawaan (custom_exclusions lama Anda)
+            base_exclusions = {'2x', '89xx', 'acar', 'ada', 'adanya', 'aja', 'akan', 'ancinikko', 'anjay', 
+                               'anuu', 'apa', 'apk', 'arah', 'arus', 'atau', 'auto', 'bagian', 'bahwa', 
+                               'baik2', 'baku', 'banget', 'banyak', 'banyakji', 'baru', 'barusan', 'batas', 
+                               'bawa', 'begini', 'benarko', 'berada', 'bersama', 'berulahko', 'bgt', 'bgtu', 
+                               'biar', 'bikin', 'bisa', 'bisaji', 'bisajikah', 'bkn', 'boss', 'bro', 'bsa', 
+                               'bukan', 'cara', 'd', 'dah', 'dahhh', 'dalam', 'dan', 'dari', 'dd', 'dengan', 
+                               'di', 'dimna', 'dipahami', 'disimak', 'dlu', 'dpatji', 'dr', 'dri', 'dudui', 
+                               'fyp', 'gak', 'gampng', 'gel', 'gimana', 'gini', 'gk', 'guys', 'haah', 
+                               'hampir', 'hanya', 'hari', 'heeh', 'heheee', 'hingga', 'ia', 'id', 'info', 
+                               'informasi', 'infotolmakassar', 'ini', 'ir', 'itu', 'jadi', 'jalan', 'jam', 
+                               'jan', 'jangan', 'jd', 'jeli', 'jg', 'jgn', 'ji', 'jkt', 'jln', 'juga', 
+                               'justru', 'ka', 'kaau', 'kah', 'kak', 'kalau', 'kali', 'kalo', 'kampungan', 
+                               'kan', 'kanda', 'kapan', 'karena', 'karna', 'katanya', 'kaumi', 'kaya', 
+                               'kdng', 'ke', 'kenapa', 'kepada', 'keterangan', 'ki', 'kidc', 'kini', 'klo', 
+                               'ko', 'kodong', 'kok', 'krna', 'ku', 'kyk', 'lagi', 'lah', 'lain', 'lalang', 
+                               'lalu', 'lebih', 'lewat', 'liat', 'lima', 'makassar', 'makassarkah', 
+                               'makanya', 'mako', 'maksd', 'mamo', 'mana', 'maros', 'masa', 'masih', 
+                               'masing2', 'mau', 'maw', 'melakukan', 'melalui', 'memang', 'menjalankan', 
+                               'menjadi', 'mereka', 'merupakan', 'meski', 'mi', 'min', 'mko', 'mmg', 'msh', 
+                               'mslh', 'na', 'nai', 'namun', 'natau', 'nda', 'ndada', 'ndak', 'news', 
+                               'ngampung', 'ni', 'nih', 'nu', 'nupikir', 'nusantara', 'nya', 'ok', 'oleh', 
+                               'om', 'orang', 'org2', 'orng', 'pada', 'pas', 'pasti', 'pembangunan', 
+                               'penyebab', 'pernah', 'pinggir', 'potong', 'pun', 'punya', 'ri', 'saat', 
+                               'saja', 'sambil', 'sampe', 'sangat', 'saya', 'sebelum', 'sedeng', 'sedsng', 
+                               'sejumlah', 'sekali', 'seksi', 'sekitar', 'selalu', 'sementara', 'semoga', 
+                               'semua', 'semuaji', 'seorang', 'sering', 'serta', 'setelah', 'soal', 'sok', 
+                               'sotr', 'sudah', 'sudahmi', 'supaya', 'suryadi', 'sy', 'tabe', 'tahun', 'tak', 
+                               'talliwa', 'tau', 'tauji', 'td', 'tdk', 'tempat', 'tengah', 'tepatnya', 
+                               'terasa', 'terhadap', 'terimakasih', 'terjadi', 'terkait', 'ternyata', 
+                               'tersebut', 'terus', 'th', 'tiap', 'tidak', 'tol', 'toll', 'tolo', 'tp', 
+                               'tpi', 'trus', 'tuh', 'ucap', 'umum', 'untuk', 'ya', 'yaa', 'yaaa', 'yah', 
+                               'yang', 'yg', 'kita', 'mohon', 'semakin', 'tetap'
+                            }
+            
+            all_stopwords.update(base_exclusions)
 
-            all_stopwords = STOPWORDS.union(custom_exclusions)
-            
+            # Tambahkan input dari Text Area Sidebar (PEMBERSIHAN SPASI)
+            if kata_buang_tambahan.strip() != "":
+                # Gunakan .strip() pada tiap kata agar spasi hantu hilang
+                user_words = [w.strip().lower() for w in kata_buang_tambahan.split(',') if w.strip()]
+                all_stopwords.update(user_words)
+
             cols_wc = st.columns(len(df['category'].unique()))
             for i, cat in enumerate(df['category'].unique()):
                 sub = df[df['category'] == cat]
                 if len(sub) > 0:
                     text_data = " ".join(str(comment) for comment in sub.text).lower()
-                    wc = WordCloud(width=800, height=400, background_color='white', stopwords=all_stopwords, colormap='viridis').generate(text_data)
+                    
+                    # Buat objek WordCloud dulu dengan stopwords yang sudah kita rakit
+                    wc_obj = WordCloud(
+                        width=800, 
+                        height=400, 
+                        background_color='white', 
+                        stopwords=all_stopwords, # Lempar ke sini
+                        colormap='viridis',
+                        collocations=False # Tambahkan ini agar kata tidak berulang (seperti 'mobil mobil')
+                    ).generate(text_data)
                     
                     fig_wc, ax = plt.subplots(figsize=(10, 5))
-                    ax.imshow(wc, interpolation='bilinear')
+                    ax.imshow(wc_obj, interpolation='bilinear')
                     ax.set_title(f"Kata Kunci Sentimen {cat}", fontsize=15, fontweight='bold')
                     ax.axis("off")
                     fig_wc.savefig(f"{OUTPUT_DIR}/Chart_7_Wordcloud_{cat}.png", bbox_inches='tight')
                     with cols_wc[i]: st.pyplot(fig_wc)
+                    plt.close(fig_wc)
+                    
 
             # ZIP & DOWNLOAD
             shutil.make_archive("Dashboard_Sentimen_MUN_Live", 'zip', OUTPUT_DIR)
