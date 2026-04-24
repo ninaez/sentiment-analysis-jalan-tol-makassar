@@ -261,36 +261,28 @@ else:
             st.write("---")
             st.write("### Analisis Topik Berdasarkan Sentimen")
 
+            # Definisikan fungsi wrap di luar loop agar lebih efisien
+            def wrap_text_25(text):
+                text = str(text)
+                if len(text) > 25:
+                    spaces = [i for i, c in enumerate(text) if c == ' ']
+                    if spaces:
+                        mid = len(text) / 2
+                        best_space = min(spaces, key=lambda x: abs(x - mid))
+                        return text[:best_space] + '<br>' + text[best_space+1:]
+                return text
+
             for cat in df_ex['category'].unique():
                 sub = df_ex[df_ex['category'] == cat]
                 if len(sub) > 0:
-                    # Kolom General (40%) dan Kolom Spesifik (60%)
                     col_g, col_s = st.columns([2, 3])
                     
-                    # Hitung data
                     g_count = sub['general_topic'].value_counts().reset_index(name='Total')
                     s_count = sub['topic_list'].value_counts().reset_index(name='Total')
                     
-                    # 1. TOPIK GENERAL: Dipotong setelah karakter '&' (jika ada)
                     g_count['label_general'] = g_count['general_topic'].str.replace(' & ', ' &<br>')
-                    
-                    # 2. TOPIK SPESIFIK: Dibagi 2 baris HANYA JIKA panjang karakter > 25
-                    def wrap_text_25(text):
-                        text = str(text)
-                        if len(text) > 25:
-                            # Cari posisi semua spasi di dalam teks
-                            spaces = [i for i, c in enumerate(text) if c == ' ']
-                            if spaces:
-                                # Cari spasi yang letaknya paling dekat dengan titik tengah kalimat
-                                mid = len(text) / 2
-                                best_space = min(spaces, key=lambda x: abs(x - mid))
-                                # Sisipkan <br> tepat di spasi tengah tersebut
-                                return text[:best_space] + '<br>' + text[best_space+1:]
-                        return text # Jika <= 25 karakter, biarkan utuh
-                    
                     s_count['label_spesifik'] = s_count['topic_list'].apply(wrap_text_25)
                     
-                    # Pengali tinggi bar agar pas untuk 2 baris teks
                     tinggi_grafik_g = max(200, 150 + (len(g_count) * 33))
                     tinggi_grafik_s = max(200, 150 + (len(s_count) * 33))
                     
@@ -298,11 +290,11 @@ else:
                     fig_g = px.bar(g_count, x='Total', y='label_general', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_g.update_layout(
                         title={'text': f'Topik General - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
-                        # KUNCI PERBAIKAN: Ukuran font label sumbu Y (kiri)
-                        yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10.5}}, 
+                        yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10.5}},
+                        # KUNCI PERBAIKAN: Menghilangkan judul sumbu X ('Total')
+                        xaxis={'title': ''},
                         height=tinggi_grafik_g
                     )
-                    # TIPS TAMBAHAN: Mengecilkan ukuran font angka di ujung bar
                     fig_g.update_traces(textfont_size=10)
                     
                     fig_g.write_html(f"{OUTPUT_DIR}/Chart_5_General_Topic_{cat}.html")
@@ -312,11 +304,11 @@ else:
                     fig_s = px.bar(s_count, x='Total', y='label_spesifik', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_s.update_layout(
                         title={'text': f'Topik Spesifik - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
-                        # KUNCI PERBAIKAN: Ukuran font label sumbu Y (kiri)
                         yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10.5}}, 
+                        # KUNCI PERBAIKAN: Menghilangkan judul sumbu X ('Total')
+                        xaxis={'title': ''},
                         height=tinggi_grafik_s
                     )
-                    # TIPS TAMBAHAN: Mengecilkan ukuran font angka di ujung bar
                     fig_s.update_traces(textfont_size=10)
                     
                     fig_s.write_html(f"{OUTPUT_DIR}/Chart_6_Specific_Topic_{cat}.html")
