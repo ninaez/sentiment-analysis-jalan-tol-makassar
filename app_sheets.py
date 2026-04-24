@@ -196,8 +196,9 @@ else:
             plat_count = df['platform_group'].value_counts().reset_index(name='Total')
             fig_p = px.bar(plat_count, x='platform_group', y='Total', title='Distribusi Komentar Per-Platform', text='Total', color_discrete_sequence=[MUN_BLUE])
             
-            # KUNCI PERBAIKAN: Menghilangkan judul sumbu X dan Y
-            fig_p.update_layout(xaxis_title=None, yaxis_title=None)
+            # KUNCI PERBAIKAN: Paksa teks di atas bar jika sempit & hilangkan judul sumbu
+            fig_p.update_traces(textposition='auto', cliponaxis=False)
+            fig_p.update_layout(xaxis_title=None, yaxis_title=None, margin=dict(t=50))
             
             fig_p.write_html(f"{OUTPUT_DIR}/Chart_1_Platform.html")
             with col1: st.plotly_chart(fig_p, use_container_width=True)
@@ -211,8 +212,9 @@ else:
                                 text='Total', color='platform_detail', 
                                 color_discrete_map={'Komentar Instagram': MUN_BLUE, 'DM Instagram': '#5FA5EB'})
                 
-                # KUNCI PERBAIKAN: Tambahkan legend_title_text='' di sini
-                fig_ig.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='')
+                # KUNCI PERBAIKAN: Paksa teks di atas bar jika sempit & hilangkan judul sumbu/legenda
+                fig_ig.update_traces(textposition='auto', cliponaxis=False)
+                fig_ig.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='', margin=dict(t=50))
                 
                 fig_ig.write_html(f"{OUTPUT_DIR}/Chart_1.1_Instagram_Breakdown.html")
                 with col2: st.plotly_chart(fig_ig, use_container_width=True)
