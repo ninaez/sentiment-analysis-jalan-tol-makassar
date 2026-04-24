@@ -259,7 +259,7 @@ else:
                     # General
                     fig_g = px.bar(g_count, x='Total', y='general_topic', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_g.update_layout(
-                        title={'text': f'Topik General - {cat}', 'x': 0.5, 'xanchor': 'center'}, 
+                        title={'text': f'Topik General - {cat}', 'x': 0.0, 'xanchor': 'center'}, 
                         yaxis={'categoryorder':'total ascending', 'title': ''}, 
                         height=tinggi_grafik
                     )
@@ -269,7 +269,7 @@ else:
                     # Spesifik
                     fig_s = px.bar(s_count, x='Total', y='topic_list', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_s.update_layout(
-                        title={'text': f'Topik Spesifik - {cat}', 'x': 0.5, 'xanchor': 'center'}, 
+                        title={'text': f'Topik Spesifik - {cat}', 'x': 0.0, 'xanchor': 'center'}, 
                         yaxis={'categoryorder':'total ascending', 'title': ''}, 
                         height=tinggi_grafik
                     )
