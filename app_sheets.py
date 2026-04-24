@@ -12,45 +12,53 @@ from wordcloud import WordCloud, STOPWORDS
 st.set_page_config(page_title="Sentiment Dashboard MAN & MMN (Live)", page_icon="📊", layout="wide")
 
 # ==========================================
-# ==========================================
 # INJEKSI CSS UNTUK MENGUBAH TAMPILAN
 # ==========================================
 st.markdown("""
     <style>
-    /* Mengurangi ruang kosong di bagian paling atas halaman tanpa memotong teks */
+    /* 1. Mengurangi ruang kosong di atas halaman UTAMA */
     .block-container {
-        padding-top: 2.5rem !important; /* Angka ini aman agar teks tidak nabrak atas */
+        padding-top: 2.5rem !important; 
         padding-bottom: 1rem !important;
     }
 
-    /* 1. Ukuran font Judul Utama (st.title) */
+    /* 2. KUNCI PERBAIKAN: Mengurangi ruang kosong di atas SIDEBAR */
+    [data-testid="stSidebarUserContent"] {
+        padding-top: 2.5rem !important;
+    }
+    [data-testid="stSidebar"] .block-container {
+        padding-top: 2rem !important;
+    }
+
+    /* 3. Ukuran font Judul Utama (st.title) */
     h1 {
         font-size: 34px !important;
-        margin-top: 0rem !important; /* KUNCI PERBAIKAN: Kembalikan ke 0 agar judul utuh */
+        margin-top: 0rem !important; /* Pastikan tetap 0 agar tidak terpotong */
         padding-top: 0rem !important;
     }
     
-    /* 2. Ukuran font Header (st.header) */
+    /* 4. Ukuran font Header (st.header) */
     h2 {
         font-size: 26px !important;
     }
     
-    /* 3. Ukuran font Subheader (st.subheader) */
+    /* 5. Ukuran font Subheader (st.subheader) */
     h3 {
         font-size: 20px !important;
     }
     
-    /* 4. Ukuran font Teks Biasa / Info / Paragraf (st.write, st.info) */
+    /* 6. Ukuran font Teks Biasa / Info / Paragraf (st.write, st.info) */
     p {
         font-size: 16px !important;
     }
     
-    /* 5. Khusus mengubah ukuran Header di Sidebar */
+    /* 7. Khusus mengubah ukuran Header di Sidebar */
     [data-testid="stSidebar"] h2 {
         font-size: 24px !important;
+        margin-top: -1rem !important; /* Menarik teks "Konfigurasi Analisis" sedikit lebih ke atas */
     }
     
-    /* 6. Khusus mengubah ukuran Subheader di Sidebar */
+    /* 8. Khusus mengubah ukuran Subheader di Sidebar */
     [data-testid="stSidebar"] h3 {
         font-size: 16px !important;
     }
