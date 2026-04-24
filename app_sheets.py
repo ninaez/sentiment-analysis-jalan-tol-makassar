@@ -255,30 +255,38 @@ else:
                     g_count = sub['general_topic'].value_counts().reset_index(name='Total')
                     s_count = sub['topic_list'].value_counts().reset_index(name='Total')
                     
-                    # Menyisipkan 'enter' (<br>) setelah tanda '&'
+                    # Menyisipkan 'enter' (<br>) setelah tanda '&' pada Topik General
                     g_count['label_general'] = g_count['general_topic'].str.replace(' & ', ' &<br>')
                     
-                    # KUNCI PERBAIKAN: Hitung tinggi SECARA TERPISAH menggunakan PENGALI YANG SAMA
-                    # Ini akan membuat ketebalan batang di kiri dan kanan konsisten
-                    tinggi_grafik_g = max(200, 150 + (len(g_count) * 33))
-                    tinggi_grafik_s = max(200, 150 + (len(s_count) * 31))
+                    # KUNCI PERBAIKAN BARU: Fungsi untuk memecah Topik Spesifik setiap 3 kata
+                    def wrap_text(text):
+                        words = str(text).split()
+                        # Menggabungkan setiap 3 kata dengan spasi, lalu menyambungkannya dengan <br>
+                        return '<br>'.join([' '.join(words[i:i+3]) for i in range(0, len(words), 3)])
+                    
+                    s_count['label_spesifik'] = s_count['topic_list'].apply(wrap_text)
+                    
+                    # Karena teks label sekarang bersusun ke bawah (lebih tinggi),
+                    # pengali tinggi dinaikkan menjadi 50 agar teks tidak saling bertumpuk.
+                    tinggi_grafik_g = max(200, 150 + (len(g_count) * 35))
+                    tinggi_grafik_s = max(200, 150 + (len(s_count) * 33))
                     
                     # General
                     fig_g = px.bar(g_count, x='Total', y='label_general', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_g.update_layout(
                         title={'text': f'Topik General - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         yaxis={'categoryorder':'total ascending', 'title': ''}, 
-                        height=tinggi_grafik_g  # <-- Menggunakan tinggi khusus General
+                        height=tinggi_grafik_g
                     )
                     fig_g.write_html(f"{OUTPUT_DIR}/Chart_5_General_Topic_{cat}.html")
                     with col_g: st.plotly_chart(fig_g, use_container_width=True)
 
-                    # Spesifik
-                    fig_s = px.bar(s_count, x='Total', y='topic_list', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
+                    # Spesifik (Perhatikan perubahan pada y='label_spesifik')
+                    fig_s = px.bar(s_count, x='Total', y='label_spesifik', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_s.update_layout(
                         title={'text': f'Topik Spesifik - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         yaxis={'categoryorder':'total ascending', 'title': ''}, 
-                        height=tinggi_grafik_s  # <-- Menggunakan tinggi khusus Spesifik
+                        height=tinggi_grafik_s
                     )
                     fig_s.write_html(f"{OUTPUT_DIR}/Chart_6_Specific_Topic_{cat}.html")
                     with col_s: st.plotly_chart(fig_s, use_container_width=True)
