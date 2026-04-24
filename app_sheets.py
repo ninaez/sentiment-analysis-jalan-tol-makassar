@@ -275,8 +275,8 @@ else:
                     s_count['label_spesifik'] = s_count['topic_list'].apply(wrap_text_25)
                     
                     # Pengali tinggi bar agar pas untuk 2 baris teks
-                    tinggi_grafik_g = max(200, 150 + (len(g_count) * 35))
-                    tinggi_grafik_s = max(200, 150 + (len(s_count) * 35))
+                    tinggi_grafik_g = max(200, 150 + (len(g_count) * 33))
+                    tinggi_grafik_s = max(200, 150 + (len(s_count) * 33))
                     
                     # General
                     fig_g = px.bar(g_count, x='Total', y='label_general', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
