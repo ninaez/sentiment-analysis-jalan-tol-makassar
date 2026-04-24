@@ -131,7 +131,7 @@ with st.sidebar:
     st.subheader("4. Tambah Topik Baru")
     
     # KUNCI PERBAIKAN: Menambahkan Expander untuk melihat list topik yang sudah ada
-    with st.expander("👀 Lihat Daftar Topik Spesifik"):
+    with st.expander("Lihat Daftar Topik Spesifik"):
         st.caption("Daftar topik yang saat ini sudah terdaftar di sistem:")
         # Mengambil semua topik spesifik dan mengurutkannya sesuai abjad agar mudah dibaca
         for existing_topic in sorted(topic_mapping.keys()):
