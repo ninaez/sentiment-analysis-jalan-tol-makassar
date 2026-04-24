@@ -255,24 +255,20 @@ else:
                     g_count = sub['general_topic'].value_counts().reset_index(name='Total')
                     s_count = sub['topic_list'].value_counts().reset_index(name='Total')
                     
-                    # KUNCI PERBAIKAN: Menyisipkan 'enter' (<br>) setelah tanda '&'
+                    # Menyisipkan 'enter' (<br>) setelah tanda '&'
                     g_count['label_general'] = g_count['general_topic'].str.replace(' & ', ' &<br>')
                     
-                    # KUNCI PERBAIKAN BAR BARU:
-                    # Menghitung tinggi grafik berdasarkan JUMLAH TOPIK TERBANYAK (biasanya spesifik)
-                    # Ini memaksa tinggi bingkai kedua grafik menjadi SAMA PERSIS
-                    jumlah_bar_maksimal = max(len(s_count), len(g_count))
-                    
-                    # Kita tentukan tinggi konstan: tinggi dasar 150px + (35px untuk setiap bar)
-                    # Semakin besar pengalinya (misal 40 atau 50), bar akan semakin tebal
-                    tinggi_grafik = max(250, 150 + (jumlah_bar_maksimal * 35))
+                    # KUNCI PERBAIKAN: Hitung tinggi SECARA TERPISAH menggunakan PENGALI YANG SAMA (35px per bar)
+                    # Ini akan membuat ketebalan batang di kiri dan kanan konsisten
+                    tinggi_grafik_g = max(200, 150 + (len(g_count) * 35))
+                    tinggi_grafik_s = max(200, 150 + (len(s_count) * 35))
                     
                     # General
                     fig_g = px.bar(g_count, x='Total', y='label_general', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_g.update_layout(
                         title={'text': f'Topik General - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         yaxis={'categoryorder':'total ascending', 'title': ''}, 
-                        height=tinggi_grafik # Kedua grafik memakai variabel tinggi_grafik yang sama
+                        height=tinggi_grafik_g  # <-- Menggunakan tinggi khusus General
                     )
                     fig_g.write_html(f"{OUTPUT_DIR}/Chart_5_General_Topic_{cat}.html")
                     with col_g: st.plotly_chart(fig_g, use_container_width=True)
@@ -282,10 +278,11 @@ else:
                     fig_s.update_layout(
                         title={'text': f'Topik Spesifik - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         yaxis={'categoryorder':'total ascending', 'title': ''}, 
-                        height=tinggi_grafik # Kedua grafik memakai variabel tinggi_grafik yang sama
+                        height=tinggi_grafik_s  # <-- Menggunakan tinggi khusus Spesifik
                     )
                     fig_s.write_html(f"{OUTPUT_DIR}/Chart_6_Specific_Topic_{cat}.html")
                     with col_s: st.plotly_chart(fig_s, use_container_width=True)
+                        
             # V6. Wordcloud
             st.write("---")
             st.write("### Wordcloud Sentimen")
