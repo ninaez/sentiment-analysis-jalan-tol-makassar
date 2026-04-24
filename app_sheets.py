@@ -282,9 +282,13 @@ else:
                     fig_g = px.bar(g_count, x='Total', y='label_general', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_g.update_layout(
                         title={'text': f'Topik General - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
-                        yaxis={'categoryorder':'total ascending', 'title': ''}, 
+                        # KUNCI PERBAIKAN: Ukuran font label sumbu Y (kiri)
+                        yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10}}, 
                         height=tinggi_grafik_g
                     )
+                    # TIPS TAMBAHAN: Mengecilkan ukuran font angka di ujung bar
+                    fig_g.update_traces(textfont_size=10)
+                    
                     fig_g.write_html(f"{OUTPUT_DIR}/Chart_5_General_Topic_{cat}.html")
                     with col_g: st.plotly_chart(fig_g, use_container_width=True)
 
@@ -292,9 +296,13 @@ else:
                     fig_s = px.bar(s_count, x='Total', y='label_spesifik', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_s.update_layout(
                         title={'text': f'Topik Spesifik - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
-                        yaxis={'categoryorder':'total ascending', 'title': ''}, 
+                        # KUNCI PERBAIKAN: Ukuran font label sumbu Y (kiri)
+                        yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10}}, 
                         height=tinggi_grafik_s
                     )
+                    # TIPS TAMBAHAN: Mengecilkan ukuran font angka di ujung bar
+                    fig_s.update_traces(textfont_size=10)
+                    
                     fig_s.write_html(f"{OUTPUT_DIR}/Chart_6_Specific_Topic_{cat}.html")
                     with col_s: st.plotly_chart(fig_s, use_container_width=True)
                         
