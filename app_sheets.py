@@ -15,7 +15,7 @@ st.title("⚙️ PROGRAM SENTIMENT ANALYSIS (LIVE DARI GOOGLE SHEETS)")
 # ==========================================
 # FUNGSI MEMBACA GOOGLE SHEETS
 # ==========================================
-@st.cache_data(ttl=600) # Data di-cache selama 10 menit agar tidak terus-menerus menarik data
+@st.cache_data(ttl=300) # Data di-cache selama 5 menit agar tidak terus-menerus menarik data
 def load_data_from_gsheets(url):
     try:
         # Mengubah URL agar mengekspor sebagai CSV
