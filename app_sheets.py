@@ -258,14 +258,21 @@ else:
                     # KUNCI PERBAIKAN: Menyisipkan 'enter' (<br>) setelah tanda '&'
                     g_count['label_general'] = g_count['general_topic'].str.replace(' & ', ' &<br>')
                     
-                    tinggi_grafik = max(450, len(s_count) * 25)
+                    # KUNCI PERBAIKAN BAR BARU:
+                    # Menghitung tinggi grafik berdasarkan JUMLAH TOPIK TERBANYAK (biasanya spesifik)
+                    # Ini memaksa tinggi bingkai kedua grafik menjadi SAMA PERSIS
+                    jumlah_bar_maksimal = max(len(s_count), len(g_count))
                     
-                    # General (Perhatikan bagian y='label_general')
+                    # Kita tentukan tinggi konstan: tinggi dasar 150px + (35px untuk setiap bar)
+                    # Semakin besar pengalinya (misal 40 atau 50), bar akan semakin tebal
+                    tinggi_grafik = max(250, 150 + (jumlah_bar_maksimal * 35))
+                    
+                    # General
                     fig_g = px.bar(g_count, x='Total', y='label_general', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
                     fig_g.update_layout(
                         title={'text': f'Topik General - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         yaxis={'categoryorder':'total ascending', 'title': ''}, 
-                        height=tinggi_grafik
+                        height=tinggi_grafik # Kedua grafik memakai variabel tinggi_grafik yang sama
                     )
                     fig_g.write_html(f"{OUTPUT_DIR}/Chart_5_General_Topic_{cat}.html")
                     with col_g: st.plotly_chart(fig_g, use_container_width=True)
@@ -275,11 +282,10 @@ else:
                     fig_s.update_layout(
                         title={'text': f'Topik Spesifik - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         yaxis={'categoryorder':'total ascending', 'title': ''}, 
-                        height=tinggi_grafik
+                        height=tinggi_grafik # Kedua grafik memakai variabel tinggi_grafik yang sama
                     )
                     fig_s.write_html(f"{OUTPUT_DIR}/Chart_6_Specific_Topic_{cat}.html")
                     with col_s: st.plotly_chart(fig_s, use_container_width=True)
-
             # V6. Wordcloud
             st.write("---")
             st.write("### Wordcloud Sentimen")
