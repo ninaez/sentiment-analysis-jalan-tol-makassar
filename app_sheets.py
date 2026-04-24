@@ -248,8 +248,8 @@ else:
             for cat in df_ex['category'].unique():
                 sub = df_ex[df_ex['category'] == cat]
                 if len(sub) > 0:
-                    # Kolom General (1 bagian) dan Kolom Spesifik (2 bagian / 2x lebih lebar)
-                    col_g, col_s = st.columns([1, 2])
+                    # Kolom General (40%) dan Kolom Spesifik (60%)
+                    col_g, col_s = st.columns([2, 3])
                     
                     # Hitung data
                     g_count = sub['general_topic'].value_counts().reset_index(name='Total')
