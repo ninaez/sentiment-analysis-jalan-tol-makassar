@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
 
 # Konfigurasi Halaman Web
-st.set_page_config(page_title="Dashboard Sentimen MUN (Live)", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Dashboard Sentimen MAN & MMN (Live)", page_icon="📊", layout="wide")
 
 # ==========================================
 # INJEKSI CSS UNTUK MENGUBAH UKURAN FONT
@@ -48,7 +48,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("⚙️ PROGRAM SENTIMENT ANALYSIS (LIVE DARI GOOGLE SHEETS)")
+st.title("PROGRAM SENTIMENT ANALYSIS JALAN TOL MAKASSAR")
 
 # ==========================================
 # FUNGSI MEMBACA GOOGLE SHEETS
