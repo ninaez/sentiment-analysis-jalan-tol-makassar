@@ -258,15 +258,17 @@ else:
             fig_pie.write_html(f"{OUTPUT_DIR}/Chart_2_Sentiment_Pie.html")
             st.plotly_chart(fig_pie, use_container_width=True)
 
-            # V3. Tren Sentimen
+            # V3. Tren Sentimen (Stacked Bar Chart)
             df_trend = df.groupby([df['date'].dt.date, 'category']).size().reset_index(name='Total')
-            fig_line = px.line(df_trend, x='date', y='Total', color='category', title='Tren Sentimen Harian', color_discrete_map=COLOR_MAP, markers=True)
+            
+            # KUNCI PERBAIKAN: Mengganti px.line menjadi px.bar
+            fig_trend = px.bar(df_trend, x='date', y='Total', color='category', title='Tren Sentimen Harian', color_discrete_map=COLOR_MAP)
             
             # Menghilangkan judul sumbu X, sumbu Y, dan judul legenda
-            fig_line.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='')
+            fig_trend.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='')
             
-            fig_line.write_html(f"{OUTPUT_DIR}/Chart_3_Sentiment_Trend.html")
-            st.plotly_chart(fig_line, use_container_width=True)
+            fig_trend.write_html(f"{OUTPUT_DIR}/Chart_3_Sentiment_Trend.html")
+            st.plotly_chart(fig_trend, use_container_width=True)
             
             # V4. Konten Reguler vs Pengumuman
             if ada_penyesuaian_tarif:
