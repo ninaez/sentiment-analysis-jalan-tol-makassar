@@ -65,7 +65,26 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("DASHBOARD SENTIMENT ANALYSIS - Jalan Tol Makassar")
+# ==========================================
+# BAGIAN HEADER & LOGO
+# ==========================================
+# Membuat 2 kolom: proporsi 1 untuk logo, proporsi 5 untuk judul agar pas
+col_logo, col_title = st.columns([1, 5])
+
+with col_logo:
+    # Masukkan nama file gambar Anda di sini. 
+    # Gunakan use_column_width=True agar ukurannya otomatis menyesuaikan kolom
+    try:
+        st.image("logo_MUN.png", use_container_width=True)
+    except FileNotFoundError:
+        st.error("File logo_MUN.png tidak ditemukan. Pastikan nama dan foldernya benar.")
+
+with col_title:
+    # Menggunakan HTML agar tampilan teks persis seperti referensi (2 baris atas bawah)
+    st.markdown("""
+        <h1 style='margin-bottom: 0px; padding-bottom: 0px;'>SENTIMENT ANALYSIS DASHBOARD</h1>
+        <h3 style='margin-top: 0px; padding-top: 0px; color: #333; font-weight: normal;'>Jalan Tol Makassar</h3>
+    """, unsafe_allow_html=True)
 
 # ==========================================
 # FUNGSI MEMBACA GOOGLE SHEETS
