@@ -83,8 +83,8 @@ with col_title:
     # Menggunakan HTML agar tampilan teks persis seperti referensi (2 baris atas bawah)
     st.markdown("""
         <h1 style='margin-bottom: 0px; padding-bottom: 0px;'>SENTIMENT ANALYSIS DASHBOARD</h1>
-        <h3 style='margin-top: 0px; padding-top: 0px; color: #333; font-weight: normal;'>PT Makassar Metro Network</h3>
-        <h3 style='margin-top: 0px; padding-top: 0px; color: #333; font-weight: normal;'>PT Makassar Airport Network</h3>
+        <h3 style='margin-top: 0px; padding-top: 0px; margin-bottom: 0px; color: #333; font-weight: normal; line-height: 1.3;'>PT Makassar Metro Network<br>PT Makassar Airport Network
+        </h3>
     """, unsafe_allow_html=True)
 
 # ==========================================
