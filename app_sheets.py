@@ -333,43 +333,52 @@ else:
             st.write("---")
             st.write("### Wordcloud Sentimen")
             
-            # Gunakan set kosong agar murni menggunakan kata buang kita
+            # Gunakan set kosong agar murni menggunakan kata buang
             all_stopwords = set() 
             
-            # Daftar kata buang bawaan (custom_exclusions lama Anda)
-            base_exclusions = {'2x', '89xx', 'acar', 'ada', 'adanya', 'aja', 'akan', 'ancinikko', 'anjay', 
-                               'anuu', 'apa', 'apk', 'arah', 'arus', 'atau', 'auto', 'bagian', 'bahwa', 
-                               'baik2', 'baku', 'banget', 'banyak', 'banyakji', 'baru', 'barusan', 'batas', 
-                               'bawa', 'begini', 'benarko', 'berada', 'bersama', 'berulahko', 'bgt', 'bgtu', 
-                               'biar', 'bikin', 'bisa', 'bisaji', 'bisajikah', 'bkn', 'boss', 'bro', 'bsa', 
-                               'bukan', 'cara', 'd', 'dah', 'dahhh', 'dalam', 'dan', 'dari', 'dd', 'dengan', 
-                               'di', 'dimna', 'dipahami', 'disimak', 'dlu', 'dpatji', 'dr', 'dri', 'dudui', 
-                               'fyp', 'gak', 'gampng', 'gel', 'gimana', 'gini', 'gk', 'guys', 'haah', 
-                               'hampir', 'hanya', 'hari', 'heeh', 'heheee', 'hingga', 'ia', 'id', 'info', 
-                               'informasi', 'infotolmakassar', 'ini', 'ir', 'itu', 'jadi', 'jalan', 'jam', 
-                               'jan', 'jangan', 'jd', 'jeli', 'jg', 'jgn', 'ji', 'jkt', 'jln', 'juga', 
-                               'justru', 'ka', 'kaau', 'kah', 'kak', 'kalau', 'kali', 'kalo', 'kampungan', 
-                               'kan', 'kanda', 'kapan', 'karena', 'karna', 'katanya', 'kaumi', 'kaya', 
-                               'kdng', 'ke', 'kenapa', 'kepada', 'keterangan', 'ki', 'kidc', 'kini', 'klo', 
-                               'ko', 'kodong', 'kok', 'krna', 'ku', 'kyk', 'lagi', 'lah', 'lain', 'lalang', 
-                               'lalu', 'lebih', 'lewat', 'liat', 'lima', 'makassar', 'makassarkah', 
-                               'makanya', 'mako', 'maksd', 'mamo', 'mana', 'maros', 'masa', 'masih', 
-                               'masing2', 'mau', 'maw', 'melakukan', 'melalui', 'memang', 'menjalankan', 
-                               'menjadi', 'mereka', 'merupakan', 'meski', 'mi', 'min', 'mko', 'mmg', 'msh', 
-                               'mslh', 'na', 'nai', 'namun', 'natau', 'nda', 'ndada', 'ndak', 'news', 
-                               'ngampung', 'ni', 'nih', 'nu', 'nupikir', 'nusantara', 'nya', 'ok', 'oleh', 
-                               'om', 'orang', 'org2', 'orng', 'pada', 'pas', 'pasti', 'pembangunan', 
-                               'penyebab', 'pernah', 'pinggir', 'potong', 'pun', 'punya', 'ri', 'saat', 
-                               'saja', 'sambil', 'sampe', 'sangat', 'saya', 'sebelum', 'sedeng', 'sedsng', 
-                               'sejumlah', 'sekali', 'seksi', 'sekitar', 'selalu', 'sementara', 'semoga', 
-                               'semua', 'semuaji', 'seorang', 'sering', 'serta', 'setelah', 'soal', 'sok', 
-                               'sotr', 'sudah', 'sudahmi', 'supaya', 'suryadi', 'sy', 'tabe', 'tahun', 'tak', 
-                               'talliwa', 'tau', 'tauji', 'td', 'tdk', 'tempat', 'tengah', 'tepatnya', 
-                               'terasa', 'terhadap', 'terimakasih', 'terjadi', 'terkait', 'ternyata', 
-                               'tersebut', 'terus', 'th', 'tiap', 'tidak', 'tol', 'toll', 'tolo', 'tp', 
-                               'tpi', 'trus', 'tuh', 'ucap', 'umum', 'untuk', 'ya', 'yaa', 'yaaa', 'yah', 
-                               'yang', 'yg', 'kita', 'mohon', 'semakin', 'tetap'
-                            }
+            # Daftar kata buang gabungan
+            base_exclusions = {
+                '2x', '89xx', 'acar', 'ada', 'adalah', 'adanya', 'admin', 'aja', 'akan', 
+                'allah', 'ancinikko', 'anda', 'anjay', 'anuu', 'apa', 'apk', 'arah', 
+                'arus', 'atas', 'atau', 'auto', 'bagian', 'bahwa', 'baik2', 'baku', 
+                'banget', 'banyak', 'banyakji', 'baru', 'barusan', 'batas', 'bawa', 
+                'begini', 'begitu', 'betul', 'belakangan', 'belum', 'benarko', 'berada', 
+                'bersama', 'berulahko', 'betul', 'bgt', 'bgtu', 'biar', 'bikin', 'bisa', 
+                'bisaji', 'bisajikah', 'bkn', 'boss', 'bro', 'bsa', 'buat', 'bukan', 
+                'cara', 'd', 'dah', 'dahhh', 'dalam', 'dan', 'dari', 'datang', 'dapat', 
+                'dd', 'dengan', 'depan', 'di', 'dimna', 'dipahami', 'disimak', 'dlu', 
+                'dong', 'dpatji', 'dr', 'dri', 'dudui', 'fyp', 'gak', 'gampng', 'gel', 
+                'gimana', 'gini', 'gk', 'guys', 'haah', 'hampir', 'hanya', 'hari', 
+                'heeh', 'heheee', 'hingga', 'ia', 'id', 'info', 'informasi', 
+                'infotolmakassar', 'ini', 'ir', 'itu', 'iya', 'jadi', 'jalan', 'jam', 
+                'jan', 'jangan', 'jd', 'jeli', 'jg', 'jgn', 'ji', 'jkt', 'jln', 'juga', 
+                'justru', 'ka', 'kaau', 'kah', 'kak', 'kalau', 'kali', 'kalian', 'kalo', 
+                'kami', 'kampungan', 'kan', 'kanda', 'kapan', 'karena', 'karna', 
+                'katanya', 'kaumi', 'kaya', 'kdng', 'ke', 'kembali', 'kenapa', 'kepada', 
+                'keterangan', 'ki', 'kidc', 'kini', 'kita', 'klo', 'ko', 'kodong', 
+                'kok', 'krna', 'ku', 'kurang', 'kyk', 'lagi', 'lah', 'lain', 'lalang', 
+                'lalu', 'lebih', 'lewat', 'liat', 'lima', 'luar', 'makassar', 
+                'makassarkah', 'makanya', 'mako', 'maksd', 'mamo', 'mana', 'maros', 
+                'masa', 'masih', 'masing2', 'mau', 'maw', 'melakukan', 'melalui', 
+                'memang', 'menjalankan', 'menjadi', 'mereka', 'merupakan', 'meski', 
+                'mi', 'min', 'mko', 'mmg', 'msh', 'mslh', 'mohon', 'mulai', 'na', 
+                'nai', 'namun', 'natau', 'nda', 'ndada', 'ndak', 'news', 'ngampung', 
+                'ni', 'nih', 'nu', 'nupikir', 'nusantara', 'nya', 'ok', 'oleh', 'om', 
+                'orang', 'org2', 'orng', 'pada', 'paling', 'pas', 'pasti', 'pembangunan', 
+                'penyebab', 'pernah', 'pinggir', 'potong', 'pun', 'punya', 'ri', 
+                'saat', 'saja', 'sambil', 'sampe', 'sampai', 'sangat', 'saya', 
+                'sebagai', 'sebelum', 'secara', 'sedeng', 'sedsng', 'sejumlah', 
+                'sekali', 'seksi', 'sekitar', 'selalu', 'semakin', 'sementara', 
+                'semoga', 'semua', 'semuaji', 'seorang', 'seperti', 'sering', 
+                'serta', 'set', 'setelah', 'setiap', 'siapa', 'soal', 'sok', 'sotr', 
+                'sudah', 'sudahmi', 'supaya', 'suryadi', 'sy', 'tabe', 'tahun', 'tak', 
+                'talliwa', 'tapi', 'tau', 'tauji', 'td', 'tdk', 'telah', 'tempat', 
+                'tengah', 'tentang', 'tepatnya', 'terasa', 'terhadap', 'terimakasih', 
+                'terjadi', 'terkait', 'terlihat', 'ternyata', 'tersebut', 'terus', 
+                'tetap', 'th', 'tiap', 'tidak', 'tol', 'toll', 'tolo', 'tp', 'tpi', 
+                'trus', 'tuh', 'ucap', 'umum', 'untuk', 'waktunya', 'ya', 'yaa', 
+                'yaaa', 'yah', 'yang', 'yg'
+            }
             
             all_stopwords.update(base_exclusions)
 
