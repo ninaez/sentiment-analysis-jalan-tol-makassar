@@ -32,7 +32,7 @@ st.markdown("""
 
     /* 3. Ukuran font Judul Utama (st.title) */
     h1 {
-        font-size: 35px !important;
+        font-size: 32px !important;
         margin-top: 0rem !important; /* Pastikan tetap 0 agar tidak terpotong */
         padding-top: 0rem !important;
     }
@@ -151,6 +151,9 @@ with st.sidebar:
     st.subheader("1. Sumber Data")
     gsheets_url = st.text_input("Link Google Sheets:", placeholder="Tempel link yang sudah diset 'Anyone with the link' di sini...")
     
+    # KUNCI PERBAIKAN: Memesan tempat kosong (placeholder) tepat di bawah input teks
+    status_data = st.empty() 
+    
     st.write("---")
     
     st.subheader("2. Filter Rentang Waktu")
@@ -229,7 +232,8 @@ else:
 
             df.to_csv(f"{OUTPUT_DIR}/1_Cleaned_Data.csv", index=False)
 
-            st.success(f"Berhasil menarik {len(df)} baris data dari Google Sheets (Periode: {tanggal_mulai.strftime('%d %b %Y')} - {tanggal_selesai.strftime('%d %b %Y')}).")
+            # KUNCI PERBAIKAN: Mengirim pesan sukses ke placeholder di sidebar yang sudah disiapkan sebelumnya
+            status_data.success(f"Berhasil menarik {len(df)} baris data (Periode: {tanggal_mulai.strftime('%d %b %Y')} - {tanggal_selesai.strftime('%d %b %Y')}).")
 
             # ----------------------------------------------------
             # KARTU RINGKASAN & PERSENTASE SENTIMEN
@@ -300,8 +304,6 @@ else:
                 fig_ig.write_html(f"{OUTPUT_DIR}/Chart_1.1_Instagram_Breakdown.html")
                 with col2: st.plotly_chart(fig_ig, use_container_width=True)
                     
-            # (PIE CHART DIHAPUS)
-
             # V3. Tren Sentimen (Stacked Bar Chart)
             df_trend = df.groupby([df['date'].dt.date, 'category']).size().reset_index(name='Total')
             
