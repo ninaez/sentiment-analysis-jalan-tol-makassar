@@ -202,11 +202,11 @@ else:
         st.markdown("<div style='padding-top: 8px; font-size: 16px; font-weight: bold; color: #333;'>Periode waktu</div>", unsafe_allow_html=True)
     
     with col_d1:
-        # KUNCI PERBAIKAN: Menggunakan label_visibility="collapsed" untuk menyembunyikan label
+        # Menggunakan label_visibility="collapsed" untuk menyembunyikan label
         tanggal_mulai = st.date_input("Mulai", label_visibility="collapsed")
         
     with col_d2:
-        # KUNCI PERBAIKAN: Menggunakan label_visibility="collapsed" untuk menyembunyikan label
+        # Menggunakan label_visibility="collapsed" untuk menyembunyikan label
         tanggal_selesai = st.date_input("Selesai", label_visibility="collapsed")
         
     st.write("<br>", unsafe_allow_html=True)
@@ -269,22 +269,23 @@ else:
             # Buat 5 kolom sejajar
             c1, c2, c3, c4, c5 = st.columns(5)
             
-            # Desain CSS untuk meniru gambar referensi (Putih, border abu-abu, teks di tengah)
-            card_css = "background-color: white; border: 1px solid #e1e8ed; padding: 20px 10px; border-radius: 8px; text-align: center; box-shadow: 1px 1px 5px rgba(0,0,0,0.04);"
-            title_css = "margin: 0 0 10px 0; font-size: 14px; font-weight: bold; color: #14171a;"
+            # KUNCI PERBAIKAN: Mengurangi padding dari 20px 10px menjadi 10px 5px agar kartu lebih tipis
+            card_css = "background-color: white; border: 1px solid #e1e8ed; padding: 10px 5px; border-radius: 8px; text-align: center; box-shadow: 1px 1px 5px rgba(0,0,0,0.04);"
+            # KUNCI PERBAIKAN: Mengurangi margin bawah judul dari 10px menjadi 5px
+            title_css = "margin: 0 0 5px 0; font-size: 14px; font-weight: bold; color: #14171a;"
             
             with c1:
-                # Menggunakan warna biru cerah (ala Twitter) untuk metrik umum
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Total Komentar</p><h1 style="margin: 0; font-size: 36px; color: #00AEEF;">{total_komentar}</h1></div>', unsafe_allow_html=True)
+                # Menggunakan warna biru cerah (ala Twitter) untuk metrik umum. Ukuran font angka diturunkan sedikit ke 32px.
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Total Komentar</p><h1 style="margin: 0; font-size: 32px; color: #00AEEF;">{total_komentar}</h1></div>', unsafe_allow_html=True)
             with c2:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Unique User</p><h1 style="margin: 0; font-size: 36px; color: #00AEEF;">{total_user}</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Unique User</p><h1 style="margin: 0; font-size: 32px; color: #00AEEF;">{total_user}</h1></div>', unsafe_allow_html=True)
             with c3:
                 # Menggunakan warna dari COLOR_MAP untuk metrik sentimen
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Positif</p><h1 style="margin: 0; font-size: 36px; color: {MUN_BLUE};">{pct_positif:.1f}%</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Positif</p><h1 style="margin: 0; font-size: 32px; color: {MUN_BLUE};">{pct_positif:.1f}%</h1></div>', unsafe_allow_html=True)
             with c4:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Netral</p><h1 style="margin: 0; font-size: 36px; color: {MUN_YELLOW};">{pct_netral:.1f}%</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Netral</p><h1 style="margin: 0; font-size: 32px; color: {MUN_YELLOW};">{pct_netral:.1f}%</h1></div>', unsafe_allow_html=True)
             with c5:
-                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Negatif</p><h1 style="margin: 0; font-size: 36px; color: {MUN_RED};">{pct_negatif:.1f}%</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="{card_css}"><p style="{title_css}">Negatif</p><h1 style="margin: 0; font-size: 32px; color: {MUN_RED};">{pct_negatif:.1f}%</h1></div>', unsafe_allow_html=True)
 
             st.write("<br>", unsafe_allow_html=True)
             # ----------------------------------------------------
