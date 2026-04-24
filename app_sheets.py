@@ -257,16 +257,22 @@ else:
                     tinggi_grafik = max(450, len(s_count) * 25)
                     
                     # General
-                    fig_g = px.bar(g_count, x='Total', y='general_topic', orientation='h', title=f'Topik General - {cat}', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
-                    title_x=0.5
-                    fig_g.update_layout(yaxis={'categoryorder':'total ascending'}, height=tinggi_grafik)
+                    fig_g = px.bar(g_count, x='Total', y='general_topic', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
+                    fig_g.update_layout(
+                        title={'text': f'Topik General - {cat}', 'x': 0.5, 'xanchor': 'center'}, 
+                        yaxis={'categoryorder':'total ascending', 'title': ''}, 
+                        height=tinggi_grafik
+                    )
                     fig_g.write_html(f"{OUTPUT_DIR}/Chart_5_General_Topic_{cat}.html")
                     with col_g: st.plotly_chart(fig_g, use_container_width=True)
 
                     # Spesifik
-                    fig_s = px.bar(s_count, x='Total', y='topic_list', orientation='h', title=f'Topik Spesifik - {cat}', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
-                    title_x=0.5
-                    fig_s.update_layout(yaxis={'categoryorder':'total ascending'}, height=tinggi_grafik)
+                    fig_s = px.bar(s_count, x='Total', y='topic_list', orientation='h', text='Total', color_discrete_sequence=[COLOR_MAP.get(cat, 'gray')])
+                    fig_s.update_layout(
+                        title={'text': f'Topik Spesifik - {cat}', 'x': 0.5, 'xanchor': 'center'}, 
+                        yaxis={'categoryorder':'total ascending', 'title': ''}, 
+                        height=tinggi_grafik
+                    )
                     fig_s.write_html(f"{OUTPUT_DIR}/Chart_6_Specific_Topic_{cat}.html")
                     with col_s: st.plotly_chart(fig_s, use_container_width=True)
 
