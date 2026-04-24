@@ -283,7 +283,7 @@ else:
                     fig_g.update_layout(
                         title={'text': f'Topik General - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         # KUNCI PERBAIKAN: Ukuran font label sumbu Y (kiri)
-                        yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10}}, 
+                        yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10.5}}, 
                         height=tinggi_grafik_g
                     )
                     # TIPS TAMBAHAN: Mengecilkan ukuran font angka di ujung bar
@@ -297,7 +297,7 @@ else:
                     fig_s.update_layout(
                         title={'text': f'Topik Spesifik - {cat}', 'x': 0.0, 'xanchor': 'left'}, 
                         # KUNCI PERBAIKAN: Ukuran font label sumbu Y (kiri)
-                        yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10}}, 
+                        yaxis={'categoryorder':'total ascending', 'title': '', 'tickfont': {'size': 10.5}}, 
                         height=tinggi_grafik_s
                     )
                     # TIPS TAMBAHAN: Mengecilkan ukuran font angka di ujung bar
