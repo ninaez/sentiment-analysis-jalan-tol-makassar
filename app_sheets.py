@@ -233,8 +233,8 @@ else:
             df_trend = df.groupby([df['date'].dt.date, 'category']).size().reset_index(name='Total')
             fig_line = px.line(df_trend, x='date', y='Total', color='category', title='Tren Sentimen Harian', color_discrete_map=COLOR_MAP, markers=True)
             
-            # KUNCI PERBAIKAN: Menghilangkan judul sumbu X ('date') dan judul legenda ('category')
-            fig_line.update_layout(xaxis_title=None, legend_title_text='')
+            # KUNCI PERBAIKAN: Menghilangkan judul sumbu X, sumbu Y, dan judul legenda
+            fig_line.update_layout(xaxis_title=None, yaxis_title=None, legend_title_text='')
             
             fig_line.write_html(f"{OUTPUT_DIR}/Chart_3_Sentiment_Trend.html")
             st.plotly_chart(fig_line, use_container_width=True)
