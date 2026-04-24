@@ -387,7 +387,7 @@ else:
             
             with open("Dashboard_Sentimen_MUN_Live.zip", "rb") as fp:
                 st.download_button(
-                    label="⬇️ Unduh Grafik & Data (ZIP)",
+                    label="⬇️ Unduh Visualisasi & Data (ZIP)",
                     data=fp,
                     file_name="Dashboard_Sentimen_MUN_Live.zip",
                     mime="application/zip"
